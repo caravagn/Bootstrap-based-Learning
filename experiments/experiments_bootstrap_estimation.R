@@ -58,7 +58,8 @@ for (i in all.files) {
             #adj.matrix.bic.tabu = list(boot=adj.matrix.bic.tabu,card=cardinality.parent.set(adj.matrix.bic.tabu))
         }
         name.res = "reconstructions"
-        curr_result = list(adj.matrix.loglik.hc=adj.matrix.loglik.hc,adj.matrix.loglik.tabu=adj.matrix.loglik.tabu,adj.matrix.aic.hc=adj.matrix.aic.hc,adj.matrix.aic.tabu=adj.matrix.aic.tabu,adj.matrix.bic.hc=adj.matrix.bic.hc, adj.matrix.bic.tabu=adj.matrix.bic.tabu)
+        #curr_result = list(adj.matrix.loglik.hc=adj.matrix.loglik.hc,adj.matrix.loglik.tabu=adj.matrix.loglik.tabu,adj.matrix.aic.hc=adj.matrix.aic.hc,adj.matrix.aic.tabu=adj.matrix.aic.tabu,adj.matrix.bic.hc=adj.matrix.bic.hc, adj.matrix.bic.tabu=adj.matrix.bic.tabu)
+        curr_result = list(adj.matrix.loglik.hc=adj.matrix.loglik.hc,adj.matrix.aic.hc=adj.matrix.aic.hc,adj.matrix.bic.hc=adj.matrix.bic.hc)
     }
     restuls_bootstrap[[curr_split[1]]][[curr_split[2]]][[curr_split[3]]][[curr_split[4]]][[curr_split[5]]][[curr_split[6]]][[curr_split[7]]][name.res] = list(curr_result)
     
