@@ -4,8 +4,9 @@ setwd("~/Desktop/results_hill_climbing_tabu")
 # load the needed scripts and libraries
 source("perform.likelihood.fit.R")
 source("statistics.R")
-library("TRONCO")
 library("bnlearn")
+library("parallel")
+library("doParallel")
 
 # set the seed
 set.seed(2222222)
