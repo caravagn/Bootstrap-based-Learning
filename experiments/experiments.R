@@ -30,22 +30,23 @@ for (i in all.files) {
         dataset = read.table(file=paste0(getwd(),"/data/",i),header=FALSE,sep=",",check.names=FALSE,stringsAsFactors=FALSE)
         if(curr_split[3]=="continuous") {
             adj.matrix.loglik.hc = perform.my.fit(dataset,"hc","loglik-g")
-            adj.matrix.loglik.tabu = perform.my.fit(dataset,"tabu","loglik-g")
+            #adj.matrix.loglik.tabu = perform.my.fit(dataset,"tabu","loglik-g")
             adj.matrix.aic.hc = perform.my.fit(dataset,"hc","aic-g")
-            adj.matrix.aic.tabu = perform.my.fit(dataset,"tabu","aic-g")
+            #adj.matrix.aic.tabu = perform.my.fit(dataset,"tabu","aic-g")
             adj.matrix.bic.hc = perform.my.fit(dataset,"hc","bic-g")
-            adj.matrix.bic.tabu = perform.my.fit(dataset,"tabu","bic-g")
+            #adj.matrix.bic.tabu = perform.my.fit(dataset,"tabu","bic-g")
         }
         else {
             adj.matrix.loglik.hc = perform.my.fit(dataset,"hc","loglik")
-            adj.matrix.loglik.tabu = perform.my.fit(dataset,"tabu","loglik")
+            #adj.matrix.loglik.tabu = perform.my.fit(dataset,"tabu","loglik")
             adj.matrix.aic.hc = perform.my.fit(dataset,"hc","aic")
-            adj.matrix.aic.tabu = perform.my.fit(dataset,"tabu","aic")
+            #adj.matrix.aic.tabu = perform.my.fit(dataset,"tabu","aic")
             adj.matrix.bic.hc = perform.my.fit(dataset,"hc","bic")
-            adj.matrix.bic.tabu = perform.my.fit(dataset,"tabu","bic")
+            #adj.matrix.bic.tabu = perform.my.fit(dataset,"tabu","bic")
         }
         name.res = "reconstructions"
-        curr_result = list(adj.matrix.loglik.hc=adj.matrix.loglik.hc,adj.matrix.loglik.tabu=adj.matrix.loglik.tabu,adj.matrix.aic.hc=adj.matrix.aic.hc,adj.matrix.aic.tabu=adj.matrix.aic.tabu,adj.matrix.bic.hc=adj.matrix.bic.hc, adj.matrix.bic.tabu=adj.matrix.bic.tabu)
+        #curr_result = list(adj.matrix.loglik.hc=adj.matrix.loglik.hc,adj.matrix.loglik.tabu=adj.matrix.loglik.tabu,adj.matrix.aic.hc=adj.matrix.aic.hc,adj.matrix.aic.tabu=adj.matrix.aic.tabu,adj.matrix.bic.hc=adj.matrix.bic.hc, adj.matrix.bic.tabu=adj.matrix.bic.tabu)
+        curr_result = list(adj.matrix.loglik.hc=adj.matrix.loglik.hc,adj.matrix.aic.hc=adj.matrix.aic.hc,adj.matrix.bic.hc=adj.matrix.bic.hc)
     }
     restuls_hc_tabu[[curr_split[1]]][[curr_split[2]]][[curr_split[3]]][[curr_split[4]]][[curr_split[5]]][[curr_split[6]]][[curr_split[7]]][name.res] = list(curr_result)
     
