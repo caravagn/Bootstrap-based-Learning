@@ -25,3 +25,7 @@ for (r in c("loglik-g","aic-g","bic-g")) {
 # perform the estimation by bootstrap
 bootstrap_results_discrete = bootstrap.estimation(dataset_discrete,regularization="loglik")
 bootstrap_results_continuous = bootstrap.estimation(dataset_continuous,regularization="loglik-g")
+
+# estimate the cardinalities of the parent sets for the two bootstrap estimations
+discrete.cardinalities = cardinality.parent.set(bootstrap_results_discrete)
+continuous.cardinalities = cardinality.parent.set(bootstrap_results_continuous)

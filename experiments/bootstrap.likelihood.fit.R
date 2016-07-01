@@ -49,7 +49,7 @@ bootstrap.estimation <- function( dataset, regularization, command = "hc",
     
 }
 
-# perform structural inference by likelihood fit    
+# perform structural inference by likelihood fit
 likelihood.fit <- function( dataset, regularization, command = "hc" ) {
 
     # structure to save the adjacency matrix of the reconstructed topolgy
@@ -108,6 +108,22 @@ likelihood.fit <- function( dataset, regularization, command = "hc" ) {
     }
     
     return(adj.matrix)
+    
+}
+
+# estimate the mean number of parent per node
+cardinality.parent.set <- function( bootstrap.results ) {
+
+    # count the parents per node in each bootstrap iteration
+    res = lapply(bootstrap.results,FUN=function(y){sapply(1:nrow(y),FUN=function(x){sum(y[,x])})})
+    
+    # make a matrix out of the results of the previous step
+    res = matrix(unlist(res),nrow=length(bootstrap.results),ncol=nrow(bootstrap.results[[1]]))
+    
+    # estimate the cardinality of the parent sets
+    res = round(colSums(res)/length(bootstrap.results))
+    
+    return(res)
     
 }
 
