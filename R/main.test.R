@@ -2,9 +2,11 @@
 library(bnlearn)
 library(parallel)
 library(doParallel)
+library(igraph)
 
 # source the required scripts
 source("bootstrap.likelihood.fit.R")
+source("build.consensus.structure.R")
 
 # read the datasets
 dataset_discrete = read.table(file="test_discrete_dataset_sample_size_10_noise_level_0.2.txt",sep=",",check.names=FALSE,stringsAsFactors=FALSE)
@@ -29,3 +31,7 @@ bootstrap_results_continuous = bootstrap.estimation(dataset_continuous,regulariz
 # estimate the cardinalities of the parent sets for the two bootstrap estimations
 discrete.cardinalities = cardinality.parent.set(bootstrap_results_discrete)
 continuous.cardinalities = cardinality.parent.set(bootstrap_results_continuous)
+
+# estimate the structure based on the top best scores arcs
+results_discrete = build.consensus(bootstrap_results_discrete,discrete.cardinalities)
+results_continuous = build.consensus(bootstrap_results_continuous,continuous.cardinalities)
