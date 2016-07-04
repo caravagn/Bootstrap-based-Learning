@@ -14,7 +14,7 @@ set.seed(3333333)
 all.files = list.files(paste0(getwd(),"/data"),recursive=TRUE)
 
 # read all the data and get the results
-restuls_bootstrap = NULL
+results_bootstrap = NULL
 adj.matrix = NULL
 name.res = NULL
 cont = 0
@@ -62,10 +62,10 @@ for (i in all.files) {
         curr_result = list(adj.matrix.loglik.hc=adj.matrix.loglik.hc,adj.matrix.aic.hc=adj.matrix.aic.hc,adj.matrix.bic.hc=adj.matrix.bic.hc)
     }
     if(name.res=="adj.matrix") {
-        restuls_bootstrap[[curr_split[1]]][[curr_split[2]]][[curr_split[3]]][[curr_split[4]]][[curr_split[5]]][[curr_split[6]]][[curr_split[7]]][name.res] = list(curr_result)
+        results_bootstrap[[curr_split[1]]][[curr_split[2]]][[curr_split[3]]][[curr_split[4]]][[curr_split[5]]][[curr_split[6]]][[curr_split[7]]][name.res] = list(curr_result)
     }
     else {
-        restuls_bootstrap[[curr_split[1]]][[curr_split[2]]][[curr_split[3]]][[curr_split[4]]][[curr_split[5]]][[curr_split[6]]][[curr_split[7]]][[name.res]][[gsub(".txt","",unlist(strsplit(curr_split[8],"_")))[4]]][gsub(".txt","",unlist(strsplit(curr_split[8],"_")))[7]] = list(curr_result)
+        results_bootstrap[[curr_split[1]]][[curr_split[2]]][[curr_split[3]]][[curr_split[4]]][[curr_split[5]]][[curr_split[6]]][[curr_split[7]]][[name.res]][[gsub(".txt","",unlist(strsplit(curr_split[8],"_")))[4]]][gsub(".txt","",unlist(strsplit(curr_split[8],"_")))[7]] = list(curr_result)
     }
     
     # compute the statistics
@@ -74,7 +74,7 @@ for (i in all.files) {
         # for (j in names(curr_result)) {
             # curr_stats[[j]] = list(getStats(adj.matrix,curr_result[[j]]))
         # }
-        # restuls_bootstrap[[curr_split[1]]][[curr_split[2]]][[curr_split[3]]][[curr_split[4]]][[curr_split[5]]][[curr_split[6]]][[curr_split[7]]][["statistics"]][[gsub(".txt","",unlist(strsplit(curr_split[8],"_")))[4]]][gsub(".txt","",unlist(strsplit(curr_split[8],"_")))[7]] = list(curr_stats)
+        # results_bootstrap[[curr_split[1]]][[curr_split[2]]][[curr_split[3]]][[curr_split[4]]][[curr_split[5]]][[curr_split[6]]][[curr_split[7]]][["statistics"]][[gsub(".txt","",unlist(strsplit(curr_split[8],"_")))[4]]][gsub(".txt","",unlist(strsplit(curr_split[8],"_")))[7]] = list(curr_stats)
     # }
     
     cont = cont + 1
@@ -82,4 +82,4 @@ for (i in all.files) {
 }
 
 # save the results
-save(restuls_bootstrap,file="restuls_bootstrap.RData")
+save(results_bootstrap,file="results_bootstrap.RData")
