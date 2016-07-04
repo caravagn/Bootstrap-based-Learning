@@ -22,6 +22,10 @@ build.consensus <- function( bootstrap_results, parents_cardinalities ) {
         }
     }
     
+	# print(added_edges)
+	# print(added_scores)
+	# print(adj.matrix)
+	
     # remove any loop
     adj.matrix = remove.loops(adj.matrix,added_edges,added_scores)
     
