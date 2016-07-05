@@ -7,6 +7,7 @@ library(igraph)
 # source the required scripts
 source("bootstrap.likelihood.fit.R")
 source("build.consensus.structure.R")
+source("build.conditional.structure.R")
 
 # read the datasets
 dataset_discrete = read.table(file="test_discrete_dataset_sample_size_10_noise_level_0.2.txt",sep=",",check.names=FALSE,stringsAsFactors=FALSE)
@@ -33,5 +34,9 @@ discrete.cardinalities = cardinality.parent.set(bootstrap_results_discrete)
 continuous.cardinalities = cardinality.parent.set(bootstrap_results_continuous)
 
 # estimate the structure based on the top best scores arcs
-results_discrete = build.consensus(bootstrap_results_discrete,discrete.cardinalities)
-results_continuous = build.consensus(bootstrap_results_continuous,continuous.cardinalities)
+results_discrete_consensus = build.consensus(bootstrap_results_discrete,discrete.cardinalities)
+results_continuous_consensus = build.consensus(bootstrap_results_continuous,continuous.cardinalities)
+
+# estimate the structure based on the top conditional best scores arcs
+results_discrete_conditional = build.conditional.consensus(bootstrap_results_discrete,discrete.cardinalities)
+results_continuous_conditional = build.conditional.consensus(bootstrap_results_continuous,continuous.cardinalities)
