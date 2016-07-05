@@ -24,6 +24,8 @@ build.consensus <- function( bootstrap_results, parents_cardinalities ) {
     
     # remove any loop
     adj.matrix = remove.loops(adj.matrix,added_edges,added_scores)
+    colnames(adj.matrix) = as.character(1:ncol(adj.matrix))
+    rownames(adj.matrix) = as.character(1:nrow(adj.matrix))
     
     return(adj.matrix)
     
@@ -33,12 +35,12 @@ remove.loops <- function( adj.matrix, edges, scores ) {
     
     # if I have at least one edge
     if(length(edges)>0) {
+            
+        ordered.scores = sort(scores,decreasing=FALSE,index.return=TRUE)
+        ordered.edges = edges[ordered.scores$ix]
         
         # go through the edges in decreasing order of confidence
         for (i in 1:length(edges)) {
-            
-            ordered.scores = sort(scores,decreasing=FALSE,index.return=TRUE)
-            ordered.edges = edges[ordered.scores$ix]
             
             # consider any edge i --> j
             curr.edge = ordered.edges[[i]]
