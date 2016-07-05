@@ -24,7 +24,7 @@ for (runs in names(results_bootstrap[["run"]])) {
     for (var in names(results_bootstrap[["run"]][[runs]])) {
         for (den in names(results_bootstrap[["run"]][[runs]][[var]][["node_size"]][["10"]][["density"]])) {
             curr_ground_true = results_bootstrap[["run"]][[runs]][[var]][["node_size"]][["10"]][["density"]][[den]][["adj.matrix"]][["adj.matrix.true"]]
-            for (den in names(results_bootstrap[["run"]][[runs]][[var]][["node_size"]][["10"]][["density"]])) {
+            #for (den in names(results_bootstrap[["run"]][[runs]][[var]][["node_size"]][["10"]][["density"]])) {
                 for (samples in names(results_bootstrap[["run"]][[runs]][[var]][["node_size"]][["10"]][["density"]][[den]][["reconstructions"]])) {
                     for (noise_levels in names(results_bootstrap[["run"]][[runs]][[var]][["node_size"]][["10"]][["density"]][[den]][["reconstructions"]][[samples]])) {
                         for (reg in names(results_bootstrap[["run"]][[runs]][[var]][["node_size"]][["10"]][["density"]][[den]][["reconstructions"]][[samples]][[noise_levels]])) {
@@ -44,7 +44,7 @@ for (runs in names(results_bootstrap[["run"]])) {
                         }
                     }
                 }
-            }
+            #}
         }
     }
 }
