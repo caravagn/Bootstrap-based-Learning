@@ -24,6 +24,8 @@ build.consensus <- function( bootstrap_results, parents_cardinalities ) {
     
     # remove any loop
     adj.matrix = remove.loops(adj.matrix,added_edges,added_scores)
+    colnames(adj.matrix) = as.character(1:ncol(adj.matrix))
+    rownames(adj.matrix) = as.character(1:nrow(adj.matrix))
     
     return(adj.matrix)
     

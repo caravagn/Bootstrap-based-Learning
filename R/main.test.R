@@ -8,6 +8,7 @@ library(igraph)
 source("bootstrap.likelihood.fit.R")
 source("build.consensus.structure.R")
 source("build.conditional.structure.R")
+source("build.consensus.poset.R")
 
 # read the datasets
 dataset_discrete = read.table(file="test_discrete_dataset_sample_size_10_noise_level_0.2.txt",sep=",",check.names=FALSE,stringsAsFactors=FALSE)
@@ -40,3 +41,7 @@ results_continuous_consensus = build.consensus(bootstrap_results_continuous,cont
 # estimate the structure based on the top conditional best scores arcs
 results_discrete_conditional = build.conditional.consensus(bootstrap_results_discrete,discrete.cardinalities)
 results_continuous_conditional = build.conditional.consensus(bootstrap_results_continuous,continuous.cardinalities)
+
+# estimate the poset based on the top best scores arcs and them perform likelihood it
+results_discrete_consensus_poset = build.consensus.poset(bootstrap_results_discrete,dataset_discrete,regularization="loglik",command="hc")
+results_continuous_consensus_poset = build.consensus.poset(bootstrap_results_continuous,dataset_continuous,regularization="loglik-g",command="hc")
