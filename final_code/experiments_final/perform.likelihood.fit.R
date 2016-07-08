@@ -48,7 +48,7 @@ perform.my.fit = function( dataset, command, regularization, restarts = 100 ) {
         my.net = hc(data,score=regularization,restart=restarts)
     }
     else if(command=="tabu") {
-        my.net = tabu(data,score=regularization,restart=restarts)
+        my.net = tabu(data,score=regularization)
     }
     my.arcs = my.net$arcs
     
