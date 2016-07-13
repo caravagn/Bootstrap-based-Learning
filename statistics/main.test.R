@@ -35,5 +35,5 @@ results = list(ground.true=true_adj_matrix,dataset=dataset_discrete,bootstrap.sc
 
 bootstrap.scores=Reduce("+",bootstrap_results_discrete)
 source("guido.plot.R")
-guido.plot(true_adj_matrix, bootstrap.scores, mutual_information_discrete, loop = NULL)
+guido.plot(true_adj_matrix, true_adj_matrix, bootstrap.scores, mutual_information_discrete, loop = NULL)
 
