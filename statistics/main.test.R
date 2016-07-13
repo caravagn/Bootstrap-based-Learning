@@ -32,3 +32,8 @@ mutual_information_discrete = mutinformation(dataset_discrete)
 
 # RESULTS
 results = list(ground.true=true_adj_matrix,dataset=dataset_discrete,bootstrap.scores=Reduce("+",bootstrap_results_discrete),mutual.information=mutual_information_discrete,reconstruction=results_discrete_consensus)
+
+bootstrap.scores=Reduce("+",bootstrap_results_discrete)
+source("guido.plot.R")
+guido.plot(true_adj_matrix, bootstrap.scores, mutual_information_discrete, loop = NULL)
+
