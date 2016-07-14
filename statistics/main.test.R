@@ -35,5 +35,15 @@ results = list(ground.true=true_adj_matrix,dataset=dataset_discrete,bootstrap.sc
 
 bootstrap.scores=Reduce("+",bootstrap_results_discrete)
 source("guido.plot.R")
-guido.plot(true_adj_matrix, true_adj_matrix, true_adj_matrix, bootstrap.scores, mutual_information_discrete, loop = NULL)
+
+fake.consensus = true_adj_matrix
+fake.consensus[1,3] = 0
+fake.consensus[1,9] = 0
+fake.consensus[1,2] = 0
+fake.consensus[3,5] = 1
+
+
+guido.plot(true_adj_matrix, fake.consensus, true_adj_matrix, bootstrap.scores, mutual_information_discrete, loop = NULL)
+guido.graph.plot(true_adj_matrix, fake.consensus, true_adj_matrix, bootstrap.scores, mutual_information_discrete, loop = NULL)
+
 
