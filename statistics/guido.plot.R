@@ -396,3 +396,134 @@ print(eAttrs)
 
 	
 }
+
+
+guido.plot.local = function(true.model, consensus.model, standard.model, X.scores, Y.scores, labels = c('NPB','MI'), loop = NULL, node =3)
+{
+	if(!is.matrix(true.model)) true.model = as.matrix(true_adj_matrix)
+	if(!is.matrix(X.scores)) X.scores = as.matrix(X.scores)
+	if(!is.matrix(Y.scores)) Y.scores = as.matrix(Y.scores)
+	if(!is.matrix(consensus.model)) consensus.model = as.matrix(consensus.model)
+	if(!is.matrix(standard.model)) standard.model = as.matrix(standard.model)
+	
+	## Filter
+	true.model = true.model[, node, drop = FALSE]
+	X.scores = X.scores[, node, drop = FALSE]
+	Y.scores = Y.scores[, node, drop = FALSE]
+	consensus.model = consensus.model[, node, drop = FALSE]
+	standard.model = standard.model[, node, drop = FALSE]
+	
+	# print(X.scores)
+	# print(Y.scores)
+	# print(cor(X.scores, Y.scores))
+
+	ordering = order(X.scores)
+
+	
+	# X.scores and Y.scores
+	data = NULL	
+	for(i in 1:length(ordering))
+		data = rbind(data, c(i, X.scores[ordering[i]], Y.scores[ordering[i]]))
+	
+	colnames(data) = c('X', 'X.score', 'Y.score')
+	
+	# ggplot2 data format	
+	dframe = data.frame(row.names = 1:length(ordering))
+	dframe$X = as.numeric(data[, 1])
+	dframe$X.score = as.numeric(data[, 2])
+	dframe$Y.score = as.numeric(data[, 3])
+
+	dframe$true = rep('F', length(ordering))
+	dframe$model = rep('', length(ordering))
+
+	# edges as points with special mark
+	for(i in 1:length(ordering))
+	{
+		if(true.model[ordering[i]] == 1)
+			dframe[i, 'true'] = 'T'
+		
+		if(consensus.model[ordering[i]] == 1 && standard.model[ordering[i]] == 1)
+			dframe[i, 'model'] = '*'
+			
+		if(consensus.model[ordering[i]] == 1 && standard.model[ordering[i]] == 0)
+			dframe[i, 'model'] = 'C'
+
+		if(consensus.model[ordering[i]] == 0 && standard.model[ordering[i]] == 1)
+			dframe[i, 'model'] = 'S'
+		
+	}
+				
+	library(ggplot2)
+	library(gridExtra)
+
+    mycolours = c("T" = "brown3", "F" = "black")
+    myshape = c("yes" = "a", "no" = "b")
+
+	top.frame = dframe[, c('X', 'X.score', 'true', 'model')]
+	mid.frame = dframe[, c('X', 'Y.score', 'true', 'model')]
+	
+	p.top = ggplot(top.frame, aes(x = X, y = X.score, fill = labels[1])) +
+	ggtitle(paste('Node  #', node, '(', expression('rho'), '=', round(cor(X.scores, Y.scores), 2) , ')'))+
+	# xlab(paste('X-axis ordered according to the ', labels[1],'score (*: both, C: consensus, S: standard)')) 
+	ylab('NPB') + 
+	guides(fill=FALSE) +
+    geom_point(size = 2,  aes(colour = true)) +
+    scale_color_manual(paste("Node", node ), values = mycolours) +
+    geom_text(data = top.frame, size = 3, aes(x = X + 0.05, y = X.score + 5, label = top.frame$model))  +
+    xlab('') +
+    theme(legend.position = "none") 
+
+    # scale_color_manual("Consensus", values = myshape) 
+     
+     # p.top = ggplot() +
+	# # scale_x_discrete(name="") +
+	# # scale_y_continuous(limits=c(0,1), breaks=NA, name="") +
+	# # scale_shape_discrete(solid=T, legend=F) +
+	# geom_point(data= top.frame, mapping=aes(x=X, y=X.score, shape= myshape), size=10)
+
+
+
+	p.mid = ggplot(mid.frame, aes(x = X, y = Y.score, fill = labels[2])) +
+	# xlab(paste('X-axis ordered as in the top panel (', labels[1], 'annotated)')) +
+	ylab('MI')+
+	guides(fill=FALSE) +
+	# ggtitle(paste(labels[2],'score: ', node))+
+    geom_point(size = 2, aes(colour = true)) +
+    scale_color_manual("Edge", values = mycolours) +
+    theme(legend.position = "none") +
+    xlab('') 
+    # + geom_text(data = mid.frame, size = 3, aes(x = X + 0.05, y = Y.score + 0.05, label = top.frame$X.score)) 
+
+	l = list()
+	l$p.top = p.top
+	l$p.mid = p.mid
+	return(l)	
+}
+
+
+plotterone = function(true.model, consensus.model, standard.model, X.scores, Y.scores, labels = c('NPB','MI'), loop = NULL)
+{
+	N = 	ncol(true.model)
+	
+	command = ''
+	for(i in 1:N) {
+		command  = paste(command, 
+			'r', i, ' = guido.plot.local(true.model, consensus.model, standard.model, X.scores, Y.scores, labels, loop, node =', i, ');',
+			sep = '')
+	}
+	
+	plot = 'grid.arrange('
+	for(i in 1:N) {
+		plot  = paste(plot,  'r', i, '$p.top, ',   'r', i, '$p.mid, ',  sep = '')
+	}
+	# plot = paste(plot, 'ncol=', floor(sqrt(N)), ')')
+	plot = paste(plot, 'ncol=2)')
+
+	print(plot)
+	eval(parse(text = command))
+	eval(parse(text = plot))
+		
+
+}
+
+
