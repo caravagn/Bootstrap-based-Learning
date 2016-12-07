@@ -1,5 +1,5 @@
 # perform a robust estimation of the likelihood fit by non-parametric bootstrap
-perform.consensus.likelihood.fit <- function( bootstrap_results, dataset, regularization, command = "hc" ) {
+perform.consensus.likelihood.fit <- function( bootstrap_results, dataset ) {
     
     # estimate the poset based on bootstrap confidence
     estimated.poset.confidence = build.consensus.poset(bootstrap_results,rep(nrow(bootstrap_results[[1]]),nrow(bootstrap_results[[1]])),TRUE)
