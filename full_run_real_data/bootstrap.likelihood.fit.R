@@ -57,38 +57,47 @@ likelihood.fit <- function( dataset, regularization, command = "hc" ) {
     rownames(adj.matrix) = colnames(dataset)
     colnames(adj.matrix) = colnames(dataset)
 
-    # set up the data structure on which to perform the likelihood fit
-    if(regularization%in%c("loglik","aic","bic")) {
+    # # set up the data structure on which to perform the likelihood fit
+    # if(regularization%in%c("loglik","aic","bic")) {
         
-        # discrete case, create a categorical data frame from the dataset
-        data = array("missing",c(nrow(dataset),ncol(dataset)))
-        for (i in 1:nrow(dataset)) {
-            for (j in 1:ncol(dataset)) {
-                if(dataset[i,j]==1) {
-                    data[i,j] = "observed"
-                }
-            }
-        }
-        data = as.data.frame(data, stringsAsFactors = TRUE)
-        for (n in names(data)) {
-            levels(data[[n]]) = c('missing', 'observed')
-        }
+    #     # discrete case, create a categorical data frame from the dataset
+    #     data = array("missing",c(nrow(dataset),ncol(dataset)))
+    #     for (i in 1:nrow(dataset)) {
+    #         for (j in 1:ncol(dataset)) {
+    #             if(dataset[i,j]==1) {
+    #                 data[i,j] = "observed"
+    #             }
+    #         }
+    #     }
+    #     data = as.data.frame(data, stringsAsFactors = TRUE)
+    #     for (n in names(data)) {
+    #         levels(data[[n]]) = c('missing', 'observed')
+    #     }
 
-        # renaming
-        colnames(data) = as.character(1:ncol(dataset))
-        rownames(data) = as.character(1:nrow(dataset))
+    #     # renaming
+    #     colnames(data) = as.character(1:ncol(dataset))
+    #     rownames(data) = as.character(1:nrow(dataset))
         
-    }
-    else if(regularization%in%c("loglik-g","aic-g","bic-g")) {
+    # }
+    # else if(regularization%in%c("loglik-g","aic-g","bic-g")) {
         
-        # continuous case
-        data = dataset
+    #     # continuous case
+    #     data = dataset
 
-        # renaming
-        colnames(data) = as.character(1:ncol(dataset))
-        rownames(data) = as.character(1:nrow(dataset))
+    #     # renaming
+    #     colnames(data) = as.character(1:ncol(dataset))
+    #     rownames(data) = as.character(1:nrow(dataset))
         
-    }
+    # }
+
+
+    # modify for discrete variables (not binary)
+    data = as.data.frame(dataset, stringsAsFactors = TRUE)
+    
+    # renaming
+    colnames(data) = as.character(1:ncol(dataset))
+    rownames(data) = as.character(1:nrow(dataset))
+
     
     # perform the maximum likelihood fit either by hill climbing or tabu search
     if(command=="hc") {
