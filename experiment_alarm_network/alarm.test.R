@@ -1,9 +1,9 @@
 # set the working directoy
-# my.wd = "~/Desktop/experiment_alarm_network"
-# setwd(my.wd)
+my.wd = "~/Desktop/experiment_alarm_network"
+setwd(my.wd)
 
 # Giulio 
-setwd('/Volumes/Data/Github/Bootstrap-based-Learning/experiment_alarm_network/giulio/')
+# setwd('/Volumes/Data/Github/Bootstrap-based-Learning/experiment_alarm_network/giulio/')
 
 # load the required R packages
 library(bnlearn)
