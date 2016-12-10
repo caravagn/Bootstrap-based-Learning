@@ -1,9 +1,9 @@
-setwd('/Volumes/Data/Github/Bootstrap-based-Learning/alarm/rete 1/sources')
+setwd('/Volumes/Data/Github/Bootstrap-based-Learning/alarm/rete 3/sources')
 
 # set the seed
 set.seed(12345)
 
-data = read.table('dataset_sample_size_5_noise_level_0.txt', sep = ',')
+data = read.table('dataset_sample_size_50_noise_level_0.txt', sep = ',')
 data = data.frame(sapply(1:ncol(data), function(x) { data.frame(as.factor(data[,x])) }))
 colnames(data) = paste("X", 1:ncol(data), sep ='')
 str(data)
@@ -18,6 +18,7 @@ nboot = 100
 fname = '100-'
 source('main.test.R')
 
+source('plot/plotter.R')
 
 
 # nboot = 1000
