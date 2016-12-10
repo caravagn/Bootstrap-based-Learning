@@ -1,5 +1,5 @@
 # perform the boostrap based maximum likelihood structure inference
-perform.bootstrap.inference <- function(dataset, regularization, nboot.first, nboot.second, agony_files = paste0(getwd(), "/agony_files"), cores.ratio = 0.9) {
+perform.bootstrap.inference <- function(dataset, regularization = "bic", nboot.first = 100, nboot.second = 100, test.pvalue = 0.01, agony_files = paste0(getwd(), "/agony_files"), cores.ratio = 0.9) {
 
     TIME = as.POSIXct(Sys.time(), format = "%H:%M:%S")
 
@@ -64,6 +64,21 @@ perform.bootstrap.inference <- function(dataset, regularization, nboot.first, nb
     bootstrap.second.pass.scores[["agony.poset"]][["model"]] = Reduce("+",results$bootstrap.second.pass$agony.poset$model)
     bootstrap.second.pass.scores[["agony.poset"]][["null"]] = Reduce("+",results$bootstrap.second.pass$agony.poset$null)
     results[["bootstrap.second.pass.scores"]] = bootstrap.second.pass.scores
+    cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
+
+    # estimate the final Bayesian Network with the estimated posets
+    time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
+    cat("[*] Estimating the final Bayesian Network with Pi_conf ...")
+    confidence.inference = perform.bn.inference(bootstrap.second.pass[["confidence.poset"]],confidence.poset,test.pvalue)
+    results[["confidence.inference"]] = confidence.inference[["inference"]]
+    results[["confidence.inference.pvalues"]] = confidence.inference[["pvalues"]]
+    cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
+
+    time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
+    cat("[*] Estimating the final Bayesian Network with Pi_ago ...")
+    agony.inference = perform.bn.inference(bootstrap.second.pass[["agony.poset"]],agony.poset,test.pvalue)
+    results[["agony.inference"]] = agony.inference[["inference"]]
+    results[["agony.inference.pvalues"]] = agony.inference[["pvalues"]]
     cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
     
     # Matrix compression (last step)
@@ -458,4 +473,82 @@ perform.constrained.likelihood.fit <- function(dataset, poset.adj.matrix, regula
 
     return(amat(my.net))
 
+}
+
+# perform the inference of the Bayesian network with the given bootstrap estimates
+perform.bn.inference <- function( bootstrap_results, curr.poset, test_pvalue ) {
+    pvalues_results = list()
+    pvalues_estimates = get.pvalue.estimate(bootstrap_results,curr.poset)
+    pvalues_results[["pvalues"]] = pvalues_estimates
+    for(vals in names(pvalues_estimates)) {
+        curr_res = pvalues_estimates[[vals]]
+        curr_res[which(curr_res<test_pvalue,arr.ind=TRUE)] = -1
+        curr_res[which(curr_res>=test_pvalue,arr.ind=TRUE)] = 0
+        curr_res = curr_res * -1
+        colnames(curr_res) = colnames(curr.poset)
+        rownames(curr_res) = rownames(curr.poset)
+        pvalues_estimates[[vals]] = curr_res
+    }
+    pvalues_results[["inference"]] = pvalues_estimates
+    return(pvalues_results)
+}
+
+# estimate the confidence of each arc by chi-squared test (i.e., success rate consistently lower in the null estimate by bootstrap)
+get.pvalue.estimate <- function( bootstrap_results, curr.poset ) {
+
+    bootstrap_res = get.bootstrap.second.pass.res(bootstrap_results)
+    bootstrap_model = bootstrap_res[["model"]]
+    bootstrap_null = bootstrap_res[["null"]]
+
+    curr_confidence = array(0,c(nrow(bootstrap_model),ncol(bootstrap_model)))
+    for(p in 1:nrow(bootstrap_model)) {
+        for(q in 1:ncol(bootstrap_model)) {
+            curr_model_success_estimate = unlist(bootstrap_model[p,q])
+            curr_null_success_estimate = unlist(bootstrap_null[p,q])
+            curr_success_rates = c(sum(curr_model_success_estimate),sum(curr_null_success_estimate))
+            curr_trial_sizes = c(length(curr_model_success_estimate),length(curr_null_success_estimate))
+            if(curr_success_rates[1]==0 && curr_success_rates[2]==0) {
+                curr_confidence[p,q] = 1
+            }
+            else {
+                curr_confidence[p,q] = prop.test(curr_success_rates,curr_trial_sizes,alternative="greater")$p.value
+            }
+        }
+    }
+    curr_valid_arcs = which(curr.poset==1,arr.ind=TRUE)
+    # perform pvalue correction by FDR
+    curr_confidence_fdr_adj = p.adjust(as.vector(curr_confidence[curr_valid_arcs]),method="fdr")
+    curr_confidence_fdr = curr_confidence
+    curr_confidence_fdr[curr_valid_arcs] = curr_confidence_fdr_adj
+    # perform pvalue correction by Holm
+    curr_confidence_holm_adj = p.adjust(as.vector(curr_confidence[curr_valid_arcs]),method="holm")
+    curr_confidence_holm = curr_confidence
+    curr_confidence_holm[curr_valid_arcs] = curr_confidence_holm_adj
+
+    return(list(pvalues=curr_confidence,qvalues.fdr=curr_confidence_fdr,qvalues.holm=curr_confidence_holm))
+
+}
+
+# pre-process the results of the second bootstrap
+get.bootstrap.second.pass.res <- function( bootstrap_second_pass ) {
+    
+    boot_confidence = array(list(),c(nrow(bootstrap_second_pass[[1]][[1]]),ncol(bootstrap_second_pass[[1]][[1]])))
+    boot_null_confidence = array(list(),c(nrow(bootstrap_second_pass[[1]][[1]]),ncol(bootstrap_second_pass[[1]][[1]])))
+    for(m in 1:length(bootstrap_second_pass[["model"]])) {
+        curr_boot_confidence = bootstrap_second_pass[["model"]][[m]]
+        curr_boot_null_confidence = bootstrap_second_pass[["null"]][[m]]
+        for(n in 1:nrow(curr_boot_confidence)) {
+            for(o in 1:ncol(curr_boot_confidence)) {
+                boot_confidence[n,o] = list(c(unlist(boot_confidence[n,o]),curr_boot_confidence[n,o]))
+                boot_null_confidence[n,o] = list(c(unlist(boot_null_confidence[n,o]),curr_boot_null_confidence[n,o]))
+            }
+        }
+    }
+    res = list()
+    res[["model"]] = boot_confidence
+    res[["null"]] = boot_null_confidence
+    
+    bootstrap_confidence = res
+    
+    return(bootstrap_confidence)
 }

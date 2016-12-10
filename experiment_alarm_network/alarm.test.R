@@ -36,9 +36,10 @@ modelstring(res) = paste("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF]",
 adj.matrix = amat(res)
 
 # perform the test
-results = perform.bootstrap.inference(dataset,regularization,boot.first.pass,boot.second.pass)
+results = perform.bootstrap.inference(dataset,regularization,boot.first.pass,boot.second.pass,test.pvalue)
 
-# STEP 5: perform the final inference on both confidence based and agony based posets
-# BINARY
-confidence_based_inference_binary_example = perform.inference(confidence_bootstrap_inference_binary_example,confidence_based_poset_binary_example,test.pvalue)
-agony_based_inference_binary_example = perform.inference(agony_bootstrap_inference_binary_example,agony_based_poset_binary_example,test.pvalue)
+# save the results
+results_alarm = list()
+results_alarm[["true_adj_matrix"]] = adj.matrix
+results_alarm[["inference"]] = results
+save(results_alarm,file="results_alarm.RData")

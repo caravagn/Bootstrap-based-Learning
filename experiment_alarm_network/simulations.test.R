@@ -60,6 +60,14 @@ colnames(adj.matrix) = as.character(1:ncol(adj.matrix))
 rownames(adj.matrix) = as.character(1:nrow(adj.matrix))
 
 # perform the test
-results1 = perform.bootstrap.inference(dataset1,regularization,boot.first.pass,boot.second.pass,agony_files=paste0(getwd(),"/agony_files_sim1"))
-results2 = perform.bootstrap.inference(dataset2,regularization,boot.first.pass,boot.second.pass,agony_files=paste0(getwd(),"/agony_files_sim2"))
-results3 = perform.bootstrap.inference(dataset3,regularization,boot.first.pass,boot.second.pass,agony_files=paste0(getwd(),"/agony_files_sim3"))
+results1 = perform.bootstrap.inference(dataset1,regularization,boot.first.pass,boot.second.pass,test.pvalue,agony_files=paste0(getwd(),"/agony_files_sim1"))
+results2 = perform.bootstrap.inference(dataset2,regularization,boot.first.pass,boot.second.pass,test.pvalue,agony_files=paste0(getwd(),"/agony_files_sim2"))
+results3 = perform.bootstrap.inference(dataset3,regularization,boot.first.pass,boot.second.pass,test.pvalue,agony_files=paste0(getwd(),"/agony_files_sim3"))
+
+# save the results
+results_simulations = list()
+results_simulations[["true_adj_matrix"]] = adj.matrix
+results_simulations[["samples_size_1"]] = results1
+results_simulations[["samples_size_2"]] = results2
+results_simulations[["samples_size_3"]] = results3
+save(results_simulations,file="results_simulations.RData")
