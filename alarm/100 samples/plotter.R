@@ -155,71 +155,39 @@ plt = function(model, X, nboot, p, title) {
 		cex=0.8, 
 		bty='n')
 		
+	# precision[ 'Agony', paste(nboot,', ', p, sep = '')] = precision
+
+		
+	return(c(precision, recall))
 }
 
+tprecision$'100, 0.01' = 0
+tprecision$'100, 0.001' = 0
+tprecision$'100, 0.05' = 0
+tprecision$'1000, 0.01' = 0
+
+
+
 load("data/100-alarm-agony.Rdata")
-plt(agony_based_inference_binary_example, "pvalues", 100, 0.01, 'Agony without MHC')
+x = plt(agony_model, "pvalues", 100, 0.01, 'Agony without MHC')
 dev.copy2pdf(file='100_agony_pvalues.pdf')
-plt(agony_based_inference_binary_example, 'qvalues.fdr', 100, 0.01, 'Agony with FDR')
+
+plt(agony_model, 'qvalues.fdr', 100, 0.01, 'Agony with FDR')
 dev.copy2pdf(file='100_agony_fdr.pdf')
-plt(agony_based_inference_binary_example, 'qvalues.holm', 100, 0.01, 'Agony with Bonferroni')
+
+plt(agony_model, 'qvalues.holm', 100, 0.01, 'Agony with Bonferroni')
 dev.copy2pdf(file='100_agony_bonferroni.pdf')
 
-load('data/1000-alarm-agony.Rdata')
-plt(agony_based_inference_binary_example, 'pvalues', 1000, 0.01, 'Agony without MHC')
-dev.copy2pdf(file='1000_agony_pvalues.pdf')
-plt(agony_based_inference_binary_example, 'qvalues.fdr', 1000, 0.01, 'Agony with FDR')
-dev.copy2pdf(file='1000_agony_fdr.pdf')
-plt(agony_based_inference_binary_example, 'qvalues.holm', 1000, 0.01, 'Agony with Bonferroni')
-dev.copy2pdf(file='1000_agony_bonferroni.pdf')
 
-load('data/100-0.001-alarm-agony.Rdata')
-plt(agony_based_inference_binary_example, 'pvalues', 100, 0.001,'Agony without MHC')
-dev.copy2pdf(file='100_0.001_agony_pvalues.pdf')
-plt(agony_based_inference_binary_example, 'qvalues.fdr', 100, 0.001,'Agony with FDR')
-dev.copy2pdf(file='100_0.001_agony_fdr.pdf')
-plt(agony_based_inference_binary_example, 'qvalues.holm', 100, 0.001,'Agony with Bonferroni')
-dev.copy2pdf(file='100_0.001_agony_bonferroni.pdf')
-
-load('data/100-0.05-alarm-agony.Rdata')
-plt(agony_based_inference_binary_example, 'pvalues', 100, 0.05,'Agony without MHC')
-dev.copy2pdf(file='100_0.05_agony_pvalues.pdf')
-plt(agony_based_inference_binary_example, 'qvalues.fdr',100, 0.05, 'Agony with FDR')
-dev.copy2pdf(file='100_0.05_agony_fdr.pdf')
-plt(agony_based_inference_binary_example, 'qvalues.holm',100, 0.05, 'Agony with Bonferroni')
-dev.copy2pdf(file='100_0.05_agony_bonferroni.pdf')
-
-
-load('data/100-alarm-confidence.Rdata')
-plt(confidence_based_inference_binary_example, 'pvalues', 100, 0.01, 'Confidence without MHC')
-dev.copy2pdf(file='100_confidence_pvalues.pdf')
-plt(confidence_based_inference_binary_example, 'qvalues.fdr',100, 0.01, 'Confidence with FDR')
-dev.copy2pdf(file='100_confidence_fdr.pdf')
-plt(confidence_based_inference_binary_example, 'qvalues.holm', 100, 0.01,'Confidence with Bonferroni')
-dev.copy2pdf(file='100_confidence_bonferroni.pdf')
-
-load('data/1000-alarm-confidence.Rdata')
-plt(confidence_based_inference_binary_example, 'pvalues', 1000, 0.01,'Confidence without MHC')
-dev.copy2pdf(file='1000_confidence_pvalues.pdf')
-plt(confidence_based_inference_binary_example, 'qvalues.fdr',1000, 0.01, 'Confidence with FDR')
-dev.copy2pdf(file='1000_confidence_fdr.pdf')
-plt(confidence_based_inference_binary_example, 'qvalues.holm', 1000, 0.01,'Confidence with Bonferroni')
-dev.copy2pdf(file='1000_confidence_bonferroni.pdf')
-
-
-hc0 = hc(alarm, restart = 0, score ='bic')
-hc100 = hc(alarm, restart = 200, , score ='bic')
-hc1000 = hc(alarm, restart = 1100, , score ='bic')
+hc0 = hc(alarm[1:100, ], restart = 0, score ='aic')
+hc100 = hc(alarm[1:100, ], restart = 200, , score ='aic')
 
 h = NULL
 h$hc0 = amat(hc0)
 h$hc100 = amat(hc100)
-h$hc1000 = amat(hc1000)
 
 plt(h, 'hc0', 0, 51, 'Hill Climbing')
 dev.copy2pdf(file='0_HC.pdf')
 plt(h, 'hc100', 200, 51, 'Hill Climbing')
 dev.copy2pdf(file='100_HC.pdf')
-plt(h, 'hc1000', 1100, 51, 'Hill Climbing')
-dev.copy2pdf(file='1000_HC.pdf')
 
