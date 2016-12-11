@@ -25,7 +25,6 @@ test.pvalue = 0.01
 
 # set the dataset and the true adjacency matrix for the test
 data(alarm)
-dataset = alarm
 
 res = empty.graph(colnames(dataset))
 modelstring(res) = paste("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF]",
@@ -34,6 +33,15 @@ modelstring(res) = paste("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF]",
     "[VTUB|DISC:VMCH][VLNG|INT:KINK:VTUB][VALV|INT:VLNG][ACO2|VALV]", "[CCHL|ACO2:ANES:SAO2:TPR][HR|CCHL][CO|HR:STKV][BP|CO:TPR]", sep = "")
 
 adj.matrix = amat(res)
+
+bnalarm = bn.fit(res, alarm)
+# dataset = alarm
+dataset = rbn(bnalarm, n = 100)
+dataset == NA
+[is.na(dataset)]
+str(dataset)
+
+pheatmap(dataset[1:100, ])
 
 # perform the test
 results = perform.bootstrap.inference(dataset,regularization,boot.first.pass,boot.second.pass,test.pvalue)
@@ -45,7 +53,6 @@ results_alarm[["inference"]] = results
 save(results_alarm,file="results_alarm.RData")
 
 source('plot/plotter.R')
-names(results$agony.inference)
 
 plt(results$agony.inference, "pvalues", adj.matrix, 100, 0.01, 'Agony without MHC')
 dev.copy2pdf(file='100_agony_pvalues.pdf')
@@ -76,3 +83,8 @@ dev.copy2pdf(file='100_HC.pdf')
 # plt(h, 'hc1000', 1100, 51, 'Hill Climbing')
 # dev.copy2pdf(file='1000_HC.pdf')
 
+names(results$agony.inference.pvalues$pvalues)
+
+pvalues = results$agony.inference.pvalues$pvalues
+# pvalues[pvalues == 1] = NA
+ggd.qqplot(pvalues, "p-values' distribution")
