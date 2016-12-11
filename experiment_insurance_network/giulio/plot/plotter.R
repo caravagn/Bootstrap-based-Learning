@@ -3,7 +3,7 @@ library(bnlearn)
 library(RColorBrewer)
 
 
-plt = function(results, pvalues, algorithm, adj.true, nboot, p, title, stats = TRUE, save.images = TRUE) {
+plt = function(results, pvalues, algorithm, adj.true, nboot, p, title, stats = TRUE) {
 		
 	# ratio = c(5,5,1)	
 	# L1 = matrix(1, nrow=ratio[1], ncol = ratio[2])
@@ -86,8 +86,7 @@ plt = function(results, pvalues, algorithm, adj.true, nboot, p, title, stats = T
 		cex=0.8, 
 		bty='n')
 
-	if(save.images) dev.copy2pdf(file=paste(nboot, p, title, 'networks.pdf', sep ='_'))
-
+	
 	if(stats)
 	{
 		dev.new(width = 8, height = 3.5)
@@ -114,7 +113,7 @@ plt = function(results, pvalues, algorithm, adj.true, nboot, p, title, stats = T
 		# popViewport()
 		
 		dfbp = stat[5:length(stat)]
-		# print(dfbp)
+		print(dfbp)
 		colors = colorRampPalette(brewer.pal(6, 'Dark2'))(length(dfbp))
 		
 		# print(colors)
@@ -127,64 +126,11 @@ plt = function(results, pvalues, algorithm, adj.true, nboot, p, title, stats = T
 			las = 1,
 			horiz = TRUE) 
 
-		# print(is.null(pvalues))
-		if(!is.null(pvalues)) ggd.qqplot(pvalues[[algorithm]], "P-values")
-		if(save.images) dev.copy2pdf(file=paste(nboot, p, title, 'stats.pdf', sep ='_'))
-
-		colnames(stat) = title
-		return(stat)
+		ggd.qqplot(pvalues[[algorithm]], "P-values")
 	}
-	
-	
 }
 
 
-plot.stats = function(all, palette = 'Paired', cols = 8, legend.cex = .5)
-{
-	k = nrow(all)
-	par(mfrow = c(sqrt(k)+1, sqrt(k)+1),
-	    oma = c(5,4,2,2) + 0.4,
-        mar = c(2,2,2,2) + 0.4)
-
-	
-	colors = colorRampPalette(brewer.pal(cols, palette))(ncol(all))
-	names(colors) = colnames(all)
-	# print(colors)
-
-	scores = rownames(all)
-	algos = colnames(all)
-	for(i in 1:k)
-	{
-		
-		data = sort(all[i, , drop = T])
-				
-		# print(colors)
-		# print(colors)
-
-		barplot(data, 
-			main = scores[i],
-			col = colors[names(data)],
-			# names.arg= names(data),
-			names.arg = rep("", length(algos)),
-			# xlim = c(0,1),
-			cex.names = .7,
-			las = 1,
-			horiz = TRUE) 
-	}
-	
-	plot(1, type="n", axes=FALSE, xlab="", ylab="")
-
-	legend("center", 
-		title = "Algorithms",
-		algos,
-		cex = legend.cex, 
-		col = colors, 
-		pch = 15,
-		# lty=1, 
-		# lwd = 2,
-		bty='n')
-
-}
 
 
 ggd.qqplot =function(pvector, main=NULL, ...) {

@@ -43,26 +43,20 @@ dataset = rbn(bnalarm, n = 200)
 results = perform.bootstrap.inference(dataset,regularization,boot.first.pass,boot.second.pass,test.pvalue)
 
 # save the results
-results_alarm = list()
-results_alarm[["true_adj_matrix"]] = adj.matrix
-results_alarm[["inference"]] = results
-save(results_alarm,file="results_alarm.RData")
+# results_alarm = list()
+# results_alarm[["true_adj_matrix"]] = adj.matrix
+# results_alarm[["inference"]] = results
+# save(results_alarm,file="results_alarm.RData")
 
 source('plot/plotter.R')
 
-plt(results$agony.inference, results$agony.inference.pvalues, "pvalues", adj.matrix, 100, 0.01, 'Agony without MHC')
-dev.copy2pdf(file='100_agony_pvalues.pdf')
-plt(results$agony.inference, 'qvalues.fdr', adj.matrix, 100, 0.01, 'Agony with FDR')
-dev.copy2pdf(file='100_agony_fdr.pdf')
-plt(results$agony.inference, 'qvalues.holm', adj.matrix, 100, 0.01, 'Agony with Bonferroni')
-dev.copy2pdf(file='100_agony_bonferroni.pdf')
+a1 = plt(results$agony.inference, results$agony.inference.pvalues, "pvalues", adj.matrix, 100, 0.01, 'Agony without MHC')
+a2 = plt(results$agony.inference, results$agony.inference.pvalues, 'qvalues.fdr', adj.matrix, 100, 0.01, 'Agony with FDR')
+a3 = plt(results$agony.inference, results$agony.inference.pvalues, 'qvalues.holm', adj.matrix, 100, 0.01, 'Agony with Bonferroni')
 
-plt(results$confidence.inference, "pvalues", adj.matrix, 100, 0.01, "Confidence without MHC")
-dev.copy2pdf(file = "100_confidence_pvalues.pdf")
-plt(results$confidence.inference, "qvalues.fdr", adj.matrix, 100, 0.01, "Confidence with FDR")
-dev.copy2pdf(file = "100_confidence_fdr.pdf")
-plt(results$confidence.inference, "qvalues.holm", adj.matrix, 100, 0.01, "Confidence with Bonferroni")
-dev.copy2pdf(file = "100_confidence_bonferroni.pdf")
+c1 = plt(results$confidence.inference, results$confidence.inference.pvalues, "pvalues", adj.matrix, 100, 0.01, "Confidence without MHC")
+c2 = plt(results$confidence.inference, results$confidence.inference.pvalues, "qvalues.fdr", adj.matrix, 100, 0.01, "Confidence with FDR")
+c3 = plt(results$confidence.inference, results$confidence.inference.pvalues, "qvalues.holm", adj.matrix, 100, 0.01, "Confidence with Bonferroni")
 
 
 hc0 = hc(dataset, restart = 0, score = regularization)
@@ -72,15 +66,11 @@ h = NULL
 h$hc0 = amat(hc0)
 h$hc100 = amat(hc100)
 
-plt(h, 'hc0', adj.matrix, 0, 'none', 'Hill Climbing')
-dev.copy2pdf(file='0_HC.pdf')
-plt(h, 'hc100', adj.matrix, 200,' none',  'Hill Climbing')
-dev.copy2pdf(file='100_HC.pdf')
+hc1 = plt(h, NULL, 'hc0', adj.matrix, 0, 'none', 'Hill Climbing k=0')
+hc2 = plt(h, NULL, 'hc100', adj.matrix, 200,' none',  'Hill Climbing k=200')
 # plt(h, 'hc1000', 1100, 51, 'Hill Climbing')
 # dev.copy2pdf(file='1000_HC.pdf')
 
-names(results$agony.inference.pvalues$pvalues)
-
-pvalues = results$agony.inference.pvalues$pvalues
-# pvalues[pvalues == 1] = NA
-ggd.qqplot(pvalues, "p-values' distribution")
+all = cbind(a1, a2, a3, c1, c2, c3, hc1, hc2)
+source('plot/plotter.R')
+plot.stats(all)
