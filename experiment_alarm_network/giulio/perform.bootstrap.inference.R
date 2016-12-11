@@ -1,5 +1,5 @@
 # perform the boostrap based maximum likelihood structure inference
-perform.bootstrap.inference <- function(dataset, regularization = "bic", nboot.first = 100, nboot.second = 100, test.pvalue = 0.01, agony_files = paste0(getwd(), "/agony_files"), cores.ratio = 0.9) {
+perform.bootstrap.inference <- function( dataset, regularization = "bic", nboot.first = 100, nboot.second = 100, test.pvalue = 0.01, agony_files = paste0(getwd(), "/agony_files"), cores.ratio = 0.9, true_matrix = NA ) {
 
     TIME = as.POSIXct(Sys.time(), format = "%H:%M:%S")
 
@@ -8,7 +8,6 @@ perform.bootstrap.inference <- function(dataset, regularization = "bic", nboot.f
     if (cores < 1) {
         cores = 1
     }
-
     
     # setup the parallelization to perform the bootstrap
     cat(paste("[*] Registering to use", cores, "/", detectCores(), "cores via \"parallel\" ..."))
@@ -36,7 +35,7 @@ perform.bootstrap.inference <- function(dataset, regularization = "bic", nboot.f
 
     # estimate the poset by agony plus bootstrap confidence
     time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
-    #unlink(agony_files, recursive = TRUE, force = TRUE)
+    unlink(agony_files, recursive = TRUE, force = TRUE)
     dir.create(agony_files, showWarnings = FALSE)
     cat(paste("[*] Estimating the agony poset (Pi_ago) ..."))
     get.agony.edges.list(bootstrap.first.pass, paste0(agony_files, "/inputs.txt"))
@@ -69,17 +68,21 @@ perform.bootstrap.inference <- function(dataset, regularization = "bic", nboot.f
     # estimate the final Bayesian Network with the estimated posets
     time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
     cat("[*] Estimating the final Bayesian Network with Pi_conf ...")
-    confidence.inference = perform.bn.inference(bootstrap.second.pass[["confidence.poset"]],confidence.poset,test.pvalue)
+    confidence.inference = perform.bn.inference(bootstrap.second.pass[["confidence.poset"]],confidence.poset,test.pvalue,true_matrix)
     results[["confidence.inference"]] = confidence.inference[["inference"]]
     results[["confidence.inference.pvalues"]] = confidence.inference[["pvalues"]]
+    results[["confidence.inference.performance"]] = confidence.inference[["performance"]]
     cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
 
     time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
     cat("[*] Estimating the final Bayesian Network with Pi_ago ...")
-    agony.inference = perform.bn.inference(bootstrap.second.pass[["agony.poset"]],agony.poset,test.pvalue)
+    agony.inference = perform.bn.inference(bootstrap.second.pass[["agony.poset"]],agony.poset,test.pvalue,true_matrix)
     results[["agony.inference"]] = agony.inference[["inference"]]
     results[["agony.inference.pvalues"]] = agony.inference[["pvalues"]]
+    results[["agony.inference.performance"]] = agony.inference[["performance"]]
     cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
+
+    stopCluster(cl)
     
     # Matrix compression (last step)
     results$bootstrap.first.pass = lapply(results$bootstrap.first.pass, compress.matrix)
@@ -87,15 +90,12 @@ perform.bootstrap.inference <- function(dataset, regularization = "bic", nboot.f
     results$bootstrap.second.pass$agony.poset$null = lapply(results$bootstrap.second.pass$agony.poset$null, compress.matrix)
     results$bootstrap.second.pass$confidence.poset$model =lapply(results$bootstrap.second.pass$confidence.poset$model, compress.matrix)
     results$bootstrap.second.pass$confidence.poset$null =lapply(results$bootstrap.second.pass$confidence.poset$null, compress.matrix)
-
-    stopCluster(cl)
     
-    cat(paste("Total time ", difftime(as.POSIXct(Sys.time(), format = "%H:%M:%S"), TIME, units = "auto"), " sec.\n", sep = ""))
+    cat(paste("Total time ", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - TIME, 3), " sec.\n", sep = ""))
 
     return(results)
 
 }
-
 
 # perform a robust estimation of the likelihood fit by non-parametric bootstrap
 bootstrap.estimation.first.pass <- function(dataset, regularization, command = "hc", nboot = 100, random.seed = NULL, verbose = FALSE) {
@@ -107,7 +107,7 @@ bootstrap.estimation.first.pass <- function(dataset, regularization, command = "
     set.seed(random.seed)
 
     # perform nboot bootstrap resampling
-    r = foreach(num = 1:nboot, .packages = "bnlearn", .export = c("perform.likelihood.fit")) %dopar% {
+    r = foreach(num = 1:nboot, .packages = "bnlearn", .export = "perform.likelihood.fit") %dopar% {
 
         # create the sampled dataset for the current iteration
         samples = sample(1:nrow(dataset), size = nrow(dataset), replace = TRUE)
@@ -148,10 +148,15 @@ perform.likelihood.fit <- function(dataset, regularization, command = "hc") {
 
     # create an empty network
     empty_net = empty.graph(nodes=colnames(dataset))
-    curr_random_set = sample(colnames(dataset),size=2)
-    curr_parent = curr_random_set[1]
-    curr_child = curr_random_set[2]
-    curr_start = set.arc(empty_net,from=curr_parent,to=curr_child)
+    
+    # set a random arc as initial solution
+    curr_start = empty_net
+    curr_random_set = sample((1:length(colnames(dataset))),size=length(colnames(dataset)),replace=FALSE)
+    for(i in 1:(length(colnames(dataset))-1)) {
+        curr_parent = colnames(dataset)[curr_random_set[i]]
+        curr_child = colnames(dataset)[curr_random_set[(i+1)]]
+        curr_start = set.arc(curr_start,from=curr_parent,to=curr_child)
+    }
 
     # perform maximum likelihood estimation either by hill climbing or tabu search
     if (command == "hc") 
@@ -451,10 +456,16 @@ perform.constrained.likelihood.fit <- function(dataset, poset.adj.matrix, regula
 
     # create an empty network
     empty_net = empty.graph(nodes=colnames(dataset))
-    curr_random_set = sample(colnames(dataset),size=2)
-    curr_parent = curr_random_set[1]
-    curr_child = curr_random_set[2]
-    curr_start = set.arc(empty_net,from=curr_parent,to=curr_child)
+    
+    # add a random arc from the poset as starting solution
+    curr_start = empty_net
+    valid_solution_set = which(poset.adj.matrix==1,arr.ind=TRUE)
+    if(nrow(valid_solution_set)>1) {
+        curr_random_entry = sample((1:nrow(valid_solution_set)),size=1)
+        curr_parent = colnames(dataset)[as.numeric(valid_solution_set[curr_random_entry,1])]
+        curr_child = colnames(dataset)[as.numeric(valid_solution_set[curr_random_entry,2])]
+        curr_start = set.arc(empty_net,from=curr_parent,to=curr_child)
+    }
 
     # perform maximum likelihood estimation either by hill climbing or tabu search
     if (cont > 0) {
@@ -477,8 +488,12 @@ perform.constrained.likelihood.fit <- function(dataset, poset.adj.matrix, regula
 }
 
 # perform the inference of the Bayesian network with the given bootstrap estimates
-perform.bn.inference <- function( bootstrap_results, curr.poset, test_pvalue ) {
+perform.bn.inference <- function( bootstrap_results, curr.poset, test_pvalue, true_matrix ) {
     pvalues_results = list()
+    evaluate_performance = NULL
+    if(!is.na(true_matrix)) {
+        evaluate_performance = list()
+    }
     pvalues_estimates = get.pvalue.estimate(bootstrap_results,curr.poset)
     pvalues_results[["pvalues"]] = pvalues_estimates
     for(vals in names(pvalues_estimates)) {
@@ -489,8 +504,14 @@ perform.bn.inference <- function( bootstrap_results, curr.poset, test_pvalue ) {
         colnames(curr_res) = colnames(curr.poset)
         rownames(curr_res) = rownames(curr.poset)
         pvalues_estimates[[vals]] = curr_res
+        if(!is.null(evaluate_performance)) {
+            evaluate_performance[[vals]] = evaluate.inference(true_matrix,pvalues_estimates[[vals]])
+        }
     }
     pvalues_results[["inference"]] = pvalues_estimates
+    if(!is.null(evaluate_performance)) {
+        pvalues_results[["performance"]] = evaluate_performance
+    }
     return(pvalues_results)
 }
 
@@ -552,4 +573,52 @@ get.bootstrap.second.pass.res <- function( bootstrap_second_pass ) {
     bootstrap_confidence = res
     
     return(bootstrap_confidence)
+}
+
+# evaluate the results of the inference
+evaluate.inference <- function( true_matrix, inferred_matrix ) {
+    
+    # structure where to save the results
+    statistics = list()
+    
+    # assess the positive and negative entries
+    tp = 0
+    fp = 0
+    tn = 0
+    fn = 0
+    for(i in 1:nrow(true_matrix)) {
+        for(j in 1:ncol(true_matrix)) {
+            if(i!=j) {
+                if(true_matrix[i,j]==0 && inferred_matrix[i,j]==0) {
+                    tn = tn + 1
+                }
+                else if (true_matrix[i,j]==0 && inferred_matrix[i,j]==1) {
+                    fp = fp + 1
+                }
+                else if (true_matrix[i,j]==1 && inferred_matrix[i,j]==0) {
+                    fn = fn + 1
+                }
+                else if (true_matrix[i,j]==1 && inferred_matrix[i,j]==1) {
+                    tp = tp + 1
+                }
+            }
+        }
+    }
+    
+    # compute the statistics
+    accuracy = (tp + tn) / (tp + tn + fp + fn)
+    sensitivity = tp / (tp + fn)
+    specificity = tn / (tn + fp)
+    precision = tp / (tp + fp)
+    recall = sensitivity
+    hamming_distance = fp + fn
+    statistics[["accuracy"]] = accuracy
+    statistics[["sensitivity"]] = sensitivity
+    statistics[["specificity"]] = specificity
+    statistics[["precision"]] = precision
+    statistics[["recall"]] = recall
+    statistics[["hamming_distance"]] = hamming_distance
+    
+    return(statistics)
+    
 }

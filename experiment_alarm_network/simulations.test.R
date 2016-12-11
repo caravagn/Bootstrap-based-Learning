@@ -60,9 +60,9 @@ colnames(adj.matrix) = as.character(1:ncol(adj.matrix))
 rownames(adj.matrix) = as.character(1:nrow(adj.matrix))
 
 # perform the test
-results1 = perform.bootstrap.inference(dataset1,regularization,boot.first.pass,boot.second.pass,test.pvalue,agony_files=paste0(getwd(),"/agony_files_sim1"))
-results2 = perform.bootstrap.inference(dataset2,regularization,boot.first.pass,boot.second.pass,test.pvalue,agony_files=paste0(getwd(),"/agony_files_sim2"))
-results3 = perform.bootstrap.inference(dataset3,regularization,boot.first.pass,boot.second.pass,test.pvalue,agony_files=paste0(getwd(),"/agony_files_sim3"))
+results1 = perform.bootstrap.inference(dataset1,regularization,boot.first.pass,boot.second.pass,test.pvalue,agony_files=paste0(getwd(),"/agony_files_sim1"),true_matrix=adj.matrix)
+results2 = perform.bootstrap.inference(dataset2,regularization,boot.first.pass,boot.second.pass,test.pvalue,agony_files=paste0(getwd(),"/agony_files_sim2"),true_matrix=adj.matrix)
+results3 = perform.bootstrap.inference(dataset3,regularization,boot.first.pass,boot.second.pass,test.pvalue,agony_files=paste0(getwd(),"/agony_files_sim3"),true_matrix=adj.matrix)
 
 # save the results
 results_simulations = list()

@@ -36,7 +36,7 @@ modelstring(res) = paste("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF]",
 adj.matrix = amat(res)
 
 # perform the test
-results = perform.bootstrap.inference(dataset,regularization,boot.first.pass,boot.second.pass,test.pvalue)
+results = perform.bootstrap.inference(dataset,regularization,boot.first.pass,boot.second.pass,test.pvalue,true_matrix=adj.matrix)
 
 # save the results
 results_alarm = list()
