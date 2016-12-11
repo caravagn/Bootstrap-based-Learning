@@ -1,6 +1,6 @@
 # set the working directoy
-my.wd = "~/Desktop/experiment_alarm_network"
-setwd(my.wd)
+# my.wd = "~/Desktop/experiment_alarm_network"
+# setwd(my.wd)
 
 # Giulio
 setwd('/Volumes/Data/Github/Bootstrap-based-Learning/experiment_alarm_network//giulio/')
@@ -25,6 +25,7 @@ test.pvalue = 0.01
 
 # set the dataset and the true adjacency matrix for the test
 data(alarm)
+dataset = alarm
 
 res = empty.graph(colnames(dataset))
 modelstring(res) = paste("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF]",
@@ -34,16 +35,11 @@ modelstring(res) = paste("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF]",
 
 adj.matrix = amat(res)
 
+# generate random data from that model 
 bnalarm = bn.fit(res, alarm)
-# dataset = alarm
-dataset = rbn(bnalarm, n = 100)
-dataset == NA
-[is.na(dataset)]
-str(dataset)
+dataset = rbn(bnalarm, n = 200)
 
-pheatmap(dataset[1:100, ])
-
-# perform the test
+#### CRASH - perform the test
 results = perform.bootstrap.inference(dataset,regularization,boot.first.pass,boot.second.pass,test.pvalue)
 
 # save the results
@@ -54,7 +50,7 @@ save(results_alarm,file="results_alarm.RData")
 
 source('plot/plotter.R')
 
-plt(results$agony.inference, "pvalues", adj.matrix, 100, 0.01, 'Agony without MHC')
+plt(results$agony.inference, results$agony.inference.pvalues, "pvalues", adj.matrix, 100, 0.01, 'Agony without MHC')
 dev.copy2pdf(file='100_agony_pvalues.pdf')
 plt(results$agony.inference, 'qvalues.fdr', adj.matrix, 100, 0.01, 'Agony with FDR')
 dev.copy2pdf(file='100_agony_fdr.pdf')

@@ -17,18 +17,21 @@ stats = function(X,Y){
 	res$fn = fn
 	res$tn = tn
 
-	res$sensitivity = tp/(tp+fn)
-	res$specificity = tn/(tn+fp)
-	res$precision = tp/(tp+fp)
-	res$negativepredictivevalue = tn/(tn+fn)
-	res$falsepositiverate = 1-res$sensitivity
-	res$falsediscoveryrate = 1- res$precision
-	res$accuracy = (tp+tn)/(tp+fp+fn+tn)
-	res$f1score = 2*tp/(2*tp+fp+fn)
-	res$matthewcorrelation = (tp*tn-fp*fn)/sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
+	res$TPR = tp/(tp+fn)
+	res$SPC = tn/(tn+fp)
+	res$PPV = tp/(tp+fp)
+	res$NPV = tn/(tn+fn)
+	res$FPR = 1-res$SPC
+	res$FNR = 1-res$TPR
+	res$FDR = 1- res$PPV
+	res$ACC = (tp+tn)/(tp+fp+fn+tn)
+	res$F1 = 2*tp/(2*tp+fp+fn)
+	res$MW = (tp*tn-fp*fn)/sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
+	
+	# res = t(data.frame(res, stringsAsFactors = FALSE))
+	# print(res)
 
 	return(res)
-
 }
 
 classifyedges = function(X, Y)

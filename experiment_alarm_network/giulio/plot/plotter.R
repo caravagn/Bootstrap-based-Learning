@@ -1,17 +1,25 @@
-
 library(Rgraphviz)
 library(bnlearn)
 library(RColorBrewer)
 
 
-plt = function(allresults, algorithm, adj.true, nboot, p, title) {
-	par(mfrow = c(1, 2))
-	
+plt = function(results, pvalues, algorithm, adj.true, nboot, p, title, stats = TRUE) {
+		
+	# ratio = c(5,5,1)	
+	# L1 = matrix(1, nrow=ratio[1], ncol = ratio[2])
+	# L2 = matrix(2, nrow=ratio[1], ncol = ratio[2])
+	# L3 = matrix(3, nrow=ratio[3], ncol = ratio[2])
+	# L4 = matrix(4, nrow=ratio[3], ncol = ratio[2])
 
+	# L = cbind(L1,L2)
+	# L = rbind(L,cbind(L3,L4))
+	# layout(L)
+	par(mfrow = c(1,2))
+	
 	X = adj.true
 	Xgraph = new("graphAM", adjMat = X, edgemode = "directed")
 
-	Y = allresults[[algorithm]]
+	Y = results[[algorithm]]
 	colnames(Y) = colnames(adj.true)
 	rownames(Y) = colnames(adj.true)
 	Ygraph = new("graphAM", adjMat = Y, edgemode = "directed")
@@ -52,7 +60,7 @@ plt = function(allresults, algorithm, adj.true, nboot, p, title) {
 	plot(Xgraph, attrs = list(node = list(fillcolor = colors[4])), edgeAttrs = edgesX)
 
 	stat = stats(X, Y)
-    print(t(as.data.frame(stat)))
+	print(stat)
 
 	legend("topleft", title = "True model",
 		c(
@@ -73,11 +81,53 @@ plt = function(allresults, algorithm, adj.true, nboot, p, title) {
 		paste('k', nboot), 
 		paste('p <', p), 
 		paste(''),
-		paste('pr.', round(stat$precision, 3)), 
-		paste('re.', round(stat$sensitivity, 3))), 
+		paste('pr.', round(stat$PPV, 3)), 
+		paste('re.', round(stat$TPR, 3))), 
 		cex=0.8, 
 		bty='n')
 
+	
+	if(stats)
+	{
+		dev.new(width = 8, height = 3.5)
+		par(mfrow = c(1,2))
+
+		# library(gridExtra)
+		# library(gridBase)
+
+		# vps <- baseViewports()
+		# pushViewport(vps$figure)
+		# vp1 <-plotViewport()
+	
+		# stat = lapply(stat, round, digits = 3)
+		# stat = t(stat)
+		stat = t(as.data.frame(stat))
+	
+		# mytheme <- ttheme_default(
+    		# core = list(fg_params=list(cex = 0.5)),
+    		# colhead = list(fg_params=list(cex = 0.5)),
+    		# rowhead = list(fg_params=list(cex = 0.5)))
+
+		# g <- tableGrob(df, theme = mytheme)
+		# grid.draw(g)
+		# popViewport()
+		
+		dfbp = stat[5:length(stat)]
+		print(dfbp)
+		colors = colorRampPalette(brewer.pal(6, 'Dark2'))(length(dfbp))
+		
+		# print(colors)
+		barplot(dfbp, 
+			main = "Scores",
+			# col = "cornflowerblue",
+			col =colors,
+			names.arg= rownames(stat)[5:length(stat)],
+			# cex.names = .7,
+			las = 1,
+			horiz = TRUE) 
+
+		ggd.qqplot(pvalues[[algorithm]], "P-values")
+	}
 }
 
 
