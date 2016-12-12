@@ -1,5 +1,5 @@
 # perform the boostrap based maximum likelihood structure inference
-perform.bootstrap.inference <- function( dataset, regularization = "bic", nboot.first = 100, nboot.second = 100, test.pvalue = 0.01, agony_files = paste0(getwd(), "/agony_files"), cores.ratio = 0.9, true_matrix = NA ) {
+perform.bootstrap.inference <- function( dataset, regularization = "bic", nboot.first = 100, nboot.second = 100, test.pvalue = 0.01, agony_files = paste0(getwd(), "/agony_files"), cores.ratio = 0.9, true_matrix = NA, agony.binaries = './agony', do.hc = TRUE ) {
 
     TIME = as.POSIXct(Sys.time(), format = "%H:%M:%S")
 
@@ -38,8 +38,9 @@ perform.bootstrap.inference <- function( dataset, regularization = "bic", nboot.
     unlink(agony_files, recursive = TRUE, force = TRUE)
     dir.create(agony_files, showWarnings = FALSE)
     cat(paste("[*] Estimating the agony poset (Pi_ago) ..."))
+    # print(paste0(agony.binaries, " ", agony_files, "/inputs.txt ", agony_files, "/outputs.txt"))
     get.agony.edges.list(bootstrap.first.pass, paste0(agony_files, "/inputs.txt"))
-    system(paste0("./agony ", agony_files, "/inputs.txt ", agony_files, "/outputs.txt"), ignore.stdout = TRUE)
+    system(paste0(agony.binaries, " ", agony_files, "/inputs.txt ", agony_files, "/outputs.txt"), ignore.stdout = TRUE)
     agony.poset = build.agony.poset(paste0(agony_files, "/outputs.txt"), dataset, bootstrap.first.pass)
     results[["agony.poset"]] = agony.poset
     cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
@@ -82,7 +83,6 @@ perform.bootstrap.inference <- function( dataset, regularization = "bic", nboot.
     results[["agony.inference.performance"]] = agony.inference[["performance"]]
     cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
 
-    stopCluster(cl)
     
     # Matrix compression (last step)
     results$bootstrap.first.pass = lapply(results$bootstrap.first.pass, compress.matrix)
@@ -91,19 +91,35 @@ perform.bootstrap.inference <- function( dataset, regularization = "bic", nboot.
     results$bootstrap.second.pass$confidence.poset$model =lapply(results$bootstrap.second.pass$confidence.poset$model, compress.matrix)
     results$bootstrap.second.pass$confidence.poset$null =lapply(results$bootstrap.second.pass$confidence.poset$null, compress.matrix)
     
-    cat(paste("Total time ", difftime(as.POSIXct(Sys.time(), format = "%H:%M:%S"), TIME, units = "auto"), " sec.\n", sep = ""))
+    
+    if(!do.hc) return(results)
     
     # perform the inference by hill-climing with and without restarts
-    hill.climing.no.restarts = amat(hc(dataset,score=regularization))
+    time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
+  	cat("[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ...")
+	hill.climing.no.restarts = amat(hc(dataset,score=regularization))
     results[["hill.climing.no.restarts.inference"]] = hill.climing.no.restarts
+    cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
+	
+    time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
+  	cat("[*] Estimating the Bayesian Network with Hill Climbing and", nboot.first+nboot.second ,"restarts ...")
     hill.climing.with.restarts = perform.learning.with.restarts(dataset,regularization,restarts=(nboot.first+nboot.second))
     results[["hill.climing.with.restarts"]] = hill.climing.with.restarts
-    if(!is.na(true_matrix)) {
+    cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
+
+    if(!(any(is.na(true_matrix)) || any(is.null(true_matrix)))) {
+	    time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
+  		cat("[*] Computing statistics ...")
+        
         hill.climing.no.restarts.stats = evaluate.inference(true_matrix,hill.climing.no.restarts)
         results[["hill.climing.no.restarts.performance"]] = hill.climing.no.restarts.stats
         hill.climing.with.restarts.stats = evaluate.inference(true_matrix,hill.climing.with.restarts)
         results[["hill.climing.with.restarts.performance"]] = hill.climing.with.restarts.stats
+	    cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
     }
+
+    stopCluster(cl)
+    cat(paste("Total time ", difftime(as.POSIXct(Sys.time(), format = "%H:%M:%S"), TIME, units = "auto"), " sec.\n", sep = ""))
 
     return(results)
 
@@ -603,52 +619,89 @@ get.bootstrap.second.pass.res <- function( bootstrap_second_pass ) {
 # latest best solution. 
 perform.learning.with.restarts <- function ( dataset, regularization, command = "hc", restarts = 100 ) {
     
-    # perform maximum likelihood inference with multiple restart
-    res = lapply(1:restarts, FUN = function( x ) {
+    # structure to save the results of the restarts
+    restarts.results = NULL
+
+    # parallel
+    r = foreach(num = 1:restarts, .packages = "bnlearn", .export = "perform.likelihood.fit") %dopar% {
+        # independent one another
         curr_net = perform.likelihood.fit(dataset,regularization,command)
-        curr_net_bn = empty.graph(nodes=colnames(dataset))
-        for(i in 1:nrow(curr_net)) {
-            for(j in 1:ncol(curr_net)) {
-                if(curr_net[i,j]==1) {
-                    curr_parent = colnames(dataset)[i]
-                    curr_child = colnames(dataset)[j]
-                    curr_net_bn = set.arc(curr_net_bn,from=curr_parent,to=curr_child)
-                }
-            }
-        }
-        if(length(grep("loglik",regularization))>0) {
-            curr_score = logLik(curr_net_bn,dataset)
+    }
+   
+	scores = lapply(r, function(x){
+		e = empty.graph(nodes=colnames(x))
+		amat(e) = x
+		
+		if(length(grep("loglik",regularization))>0) {
+            curr_score = logLik(e,dataset)
         }
         else if(length(grep("aic",regularization))>0) {
-            curr_score = AIC(curr_net_bn,dataset)
+            curr_score = AIC(e,dataset)
         }
         else if(length(grep("bic",regularization))>0) {
-            curr_score = BIC(curr_net_bn,dataset)
+            curr_score = BIC(e,dataset)
         }
-        curr_res = list(net=curr_net,score=curr_score)
-        return(curr_res)
-    })
+        
+        return(curr_score)
+	})
+	
+	max = min(unlist(scores))
+	idx = which(unlist(scores) == max)
+
+	if(length(idx) > 1) 
+	{
+		warning('[Hill Climbing] There are ', length(idx),' equivalently scored local optima.' )
+		idx = idx[1]	
+	}
+
+	return(restarts.results[[idx]])
+	
+# #     # perform maximum likelihood inference with multiple restart
+    # res = lapply(1:restarts, FUN = function( x ) {
+    	# curr_net = r[[i]]
+        # curr_net_bn = empty.graph(nodes=colnames(dataset))
+        # for(i in 1:nrow(curr_net)) {
+            # for(j in 1:ncol(curr_net)) {
+                # if(curr_net[i,j]==1) {
+                    # curr_parent = colnames(dataset)[i]
+                    # curr_child = colnames(dataset)[j]
+                    # curr_net_bn = set.arc(curr_net_bn,from=curr_parent,to=curr_child)
+                # }
+            # }
+        # }
+        # if(length(grep("loglik",regularization))>0) {
+            # curr_score = logLik(curr_net_bn,dataset)
+        # }
+        # else if(length(grep("aic",regularization))>0) {
+            # curr_score = AIC(curr_net_bn,dataset)
+        # }
+        # else if(length(grep("bic",regularization))>0) {
+            # curr_score = BIC(curr_net_bn,dataset)
+        # }
+        # curr_res = list(net=curr_net,score=curr_score)
+        # return(curr_res)
+    # })
     
-    # get the best inference found through the multiple restarts
-    curr_best_net = NA
-    curr_best_score = NA
-    for(i in 1:length(res)) {
-        if(is.na(curr_best_net)) {
-            curr_best_net = res[[i]]$net
-            curr_best_score = res[[i]]$score
-        }
-        else {
-            if(curr_best_score<res[[i]]$score) {
-                curr_best_net = res[[i]]$net
-                curr_best_score = res[[i]]$score
-            }
-        }
-    }
-    adj.matrix = curr_best_net
-    colnames(adj.matrix) = colnames(dataset)
-    rownames(adj.matrix) = colnames(dataset)
+    # # get the best inference found through the multiple restarts
+    # curr_best_net = NA
+    # curr_best_score = NA
+    # for(i in 1:length(res)) {
+        # if(is.na(curr_best_net)) {
+            # curr_best_net = res[[i]]$net
+            # curr_best_score = res[[i]]$score
+        # }
+        # else {
+            # if(curr_best_score<res[[i]]$score) {
+                # curr_best_net = res[[i]]$net
+                # curr_best_score = res[[i]]$score
+            # }
+        # }
+    # }
+    # adj.matrix = curr_best_net
+    # colnames(adj.matrix) = colnames(dataset)
+    # rownames(adj.matrix) = colnames(dataset)
     
-    return(adj.matrix)
+    # return(adj.matrix)
     
 }
 

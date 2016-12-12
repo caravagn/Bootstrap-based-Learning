@@ -190,6 +190,10 @@ plt.stats = function(all, palette = 'Paired', cols = 8, legend.cex = .5)
 	colors = colorRampPalette(brewer.pal(cols, palette))(ncol(all))
 	names(colors) = colnames(all)
 	
+	
+	# print(colnames(all))
+	# a.colors = colorRampPalette(brewer.pal(cols, palette))(ncol(all))
+	
 	scores = rownames(all)
 	algos = colnames(all)
 	for(i in 1:nrow(all))

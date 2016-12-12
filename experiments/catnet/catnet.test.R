@@ -1,8 +1,19 @@
+GIULIO = TRUE
+DANIELE = !GIULIO
 
-# Giulio
-setwd('/Volumes/Data/Github/Bootstrap-based-Learning/experiment_catnet_network/')
-git = '/Volumes/Data/Github/Bootstrap-based-Learning/'
-
+if(GIULIO)
+{
+	# Giulio
+	setwd('/Volumes/Data/Github/Bootstrap-based-Learning/experiments/catnet/')
+	git = '/Volumes/Data/Github/Bootstrap-based-Learning/'
+	agony.binaries = '/Volumes/Data/Github/Bootstrap-based-Learning/agony/giulio/agony'
+} 
+if(DANIELE)
+{
+	setwd('~/Desktop/')
+	git = '....'
+	agony.binaries = '/Volumes/Data/Github/Bootstrap-based-Learning/agony/daniele/agony'	
+}
 
 # load the required R packages
 library(bnlearn)
@@ -23,7 +34,7 @@ regularization = "bic"
 boot.first.pass = 100
 boot.second.pass = 100
 test.pvalue = 1E-2
-numsamples = 1000
+numsamples = 100
 
 # Random catnet network, with adjacency matrix and data
 randomnet = cnRandomCatnet(
@@ -40,7 +51,8 @@ results = perform.bootstrap.inference(
 	regularization,
 	boot.first.pass,
 	boot.second.pass,
-	test.pvalue)
+	test.pvalue,
+	agony.binaries = agony.binaries)
 
 ### Save results
 wrapper = NULL
@@ -65,6 +77,10 @@ CMHC = paste0('Confidence without MHC [', boot.first.pass, '+', boot.second.pass
 CFDR = paste0('Confidence with FDR [', boot.first.pass, '+', boot.second.pass, ' npb, p ', test.pvalue, ']')
 CBNF = paste0('Confidence with Bonferroni [', boot.first.pass, '+', boot.second.pass, ' npb, p ', test.pvalue, ']')
 
+HC0 = paste0('Hill Climbing [', 0, ' restarts]')
+HC = paste0('Hill Climbing [', boot.first.pass + boot.second.pass, ' restarts]')
+
+
 DEV.OFF = TRUE
 
 x1 = plt(results$agony.inference, results$agony.inference.pvalues, "pvalues", adj.matrix, AMHC, dev.off = DEV.OFF)
@@ -75,21 +91,9 @@ x4 = plt(results$confidence.inference, results$confidence.inference.pvalues, "pv
 x5 = plt(results$confidence.inference, results$confidence.inference.pvalues, 'qvalues.fdr', adj.matrix, CFDR, dev.off = DEV.OFF)
 x6 = plt(results$confidence.inference, results$confidence.inference.pvalues, 'qvalues.holm', adj.matrix, CBNF, dev.off = DEV.OFF)
 
-# hc0, baseline. hc, competitor
-hc0 = hc(dataset, restart = 0, score = regularization)
-hc = hc(dataset, restart = boot.first.pass + boot.second.pass, score = regularization)
+hc1 = plt(results, NULL, 'hill.climing.no.restarts.inference', adj.matrix, HC0, dev.off = DEV.OFF)
+hc2 = plt(results, NULL, 'hill.climing.with.restarts', adj.matrix, HC, dev.off = DEV.OFF)
 
-h = NULL
-h$hc0 = amat(hc0)
-h$hc = amat(hc)
-
-HC0 = paste0('Hill Climbing [', 0, ' restarts]')
-HC = paste0('Hill Climbing [', boot.first.pass + boot.second.pass, ' restarts]')
-
-hc1 = plt(h, NULL, 'hc0', adj.matrix, HC0, dev.off = DEV.OFF)
-hc2 = plt(h, NULL, 'hc', adj.matrix, HC, dev.off = DEV.OFF)
-
-source(paste0(git, "utils/plotter.R"))
 
 plt.stats(cbind(x1,x2,x3,x4,x5,x6, hc1, hc2), legend.cex = .6)
 dev.copy2pdf(file = 'All comparison.pdf')
