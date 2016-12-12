@@ -139,53 +139,6 @@ plt = function(results, pvalues, algorithm, adj.true, nboot, p, title, stats = T
 }
 
 
-plot.stats = function(all, palette = 'Paired', cols = 8, legend.cex = .5)
-{
-	k = nrow(all)
-	par(mfrow = c(sqrt(k)+1, sqrt(k)+1),
-	    oma = c(5,4,2,2) + 0.4,
-        mar = c(2,2,2,2) + 0.4)
-
-	
-	colors = colorRampPalette(brewer.pal(cols, palette))(ncol(all))
-	names(colors) = colnames(all)
-	# print(colors)
-
-	scores = rownames(all)
-	algos = colnames(all)
-	for(i in 1:k)
-	{
-		
-		data = sort(all[i, , drop = T])
-				
-		# print(colors)
-		# print(colors)
-
-		barplot(data, 
-			main = scores[i],
-			col = colors[names(data)],
-			# names.arg= names(data),
-			names.arg = rep("", length(algos)),
-			# xlim = c(0,1),
-			cex.names = .7,
-			las = 1,
-			horiz = TRUE) 
-	}
-	
-	plot(1, type="n", axes=FALSE, xlab="", ylab="")
-
-	legend("center", 
-		title = "Algorithms",
-		algos,
-		cex = legend.cex, 
-		col = colors, 
-		pch = 15,
-		# lty=1, 
-		# lwd = 2,
-		bty='n')
-
-}
-
 
 ggd.qqplot =function(pvector, main=NULL, ...) {
     o = -log10(sort(pvector,decreasing=F))

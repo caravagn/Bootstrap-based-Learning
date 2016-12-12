@@ -259,6 +259,12 @@ remove.loops <- function(adj.matrix, edges, scores) {
 
 # set the files for agony computation
 get.agony.edges.list <- function(bootstrap_results, agony_file) {
+	if(file.exists(agony_file)) {
+		file.remove(agony_file)
+		warning(paste("Agony: input file", agony_file, "was overwritten by this execution."))	
+		file.create(agony_file)	
+	}
+	
     for (i in 1:length(bootstrap_results)) {
         curr_adj.matrix = bootstrap_results[[i]]
         for (j in 1:nrow(curr_adj.matrix)) {
@@ -293,16 +299,38 @@ build.agony.poset <- function(agony_file, dataset, bootstrap_results) {
 
 # construct the poset by agony
 get.agony.poset <- function(ordering, node_size) {
+	# print(ordering)
     poset = array(0, c(node_size, node_size))
+	# print(poset)
+	
+	
+	# print(min(ordering[, 2]):max(ordering[, 2]))
     for (i in min(ordering[, 2]):max(ordering[, 2])) {
+    	
+    	
+    	
         curr_parents = ordering[which(ordering[, 2] == i), 1]
         curr_childred = ordering[which(ordering[, 2] > i), 1]
+        
+        # cat('\ncurr_parents', curr_parents, '\n')
+        # cat('\ncurr_children', curr_childred, '\n')
+        
+        # print(length(curr_parents) > 0)
+        # print(length(curr_childred) > 0)
+        
         # add arcs from lower to higher ranked nodes
         if (length(curr_parents) > 0 && length(curr_childred) > 0) {
+
+			# print(curr_parents)
+			# print(poset[, curr_childred])
+			
             for (j in curr_parents) {
                 poset[j, curr_childred] = 1
             }
         }
+        
+        # print(poset)
+        
         # add arcs in both ways for equal ranked nodes (NOTE: with this, the poset can be cyclic!)
         if (length(curr_parents) > 1) {
             for (a in 1:length(curr_parents)) {
