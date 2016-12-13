@@ -17,6 +17,7 @@ if(DANIELE)
 
 # load the required R packages
 library(bnlearn)
+library(ggplot2)
 library(igraph)
 source(paste0(git, "utils/plotter.R"))
 source(paste0(git, "utils/stat.R"))
@@ -25,7 +26,7 @@ source(paste0(git, "utils/stat.R"))
 load('/Volumes/Data/Github/Bootstrap-based-Learning/experiments/alarm-sample-size/res1E3.Rdata')
 load('/Volumes/Data/Github/Bootstrap-based-Learning/experiments/alarm-sample-size/res1E4.Rdata')
 load('/Volumes/Data/Github/Bootstrap-based-Learning/experiments/alarm-sample-size/res1E5.Rdata')
-load('/Volumes/Data/Github/Bootstrap-based-Learning/experiments/alarm-sample-size/res2E5.Rdata')
+# load('/Volumes/Data/Github/Bootstrap-based-Learning/experiments/alarm-sample-size/res2E5.Rdata')
 
 # set the dataset and the true adjacency matrix for the test
 data(alarm)
@@ -73,111 +74,113 @@ aux = function(res, which, algo, metric, m, title)
 
 # scores = c('tp', 'fp', 'fn', 'tn', 'TPR', 'SPC', 'PPV', 'NPV', 'FPR', 'FNR', 'FDR', 'ACC', 'F1', 'MW')
 
-### Agony
-points = rbind(points, 
-	aux(res = res1E3, m = 100, which ='agony.inference', algo = 'pvalues', metric = 'PPV', title = 'Agony with no MHC'),
-	aux(res = res1E3, m = 100, which ='agony.inference', algo = 'pvalues', metric = 'TPR', title = 'Agony with no MHC'),
-	aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Agony with FDR'),
-	aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Agony with FDR'),
-	aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Agony with Bonferroni'),
-	aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Agony with Bonferroni')
-	)
+# ### Agony
+# points = rbind(points, 
+	# aux(res = res1E3, m = 100, which ='agony.inference', algo = 'pvalues', metric = 'PPV', title = 'Agony with no MHC'),
+	# aux(res = res1E3, m = 100, which ='agony.inference', algo = 'pvalues', metric = 'TPR', title = 'Agony with no MHC'),
+	# aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Agony with FDR'),
+	# aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Agony with FDR'),
+	# aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Agony with Bonferroni'),
+	# aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Agony with Bonferroni')
+	# )
 
-points = rbind(points, 
-	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'pvalues', metric = 'PPV', title = 'Agony with no MHC'),
-	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'pvalues', metric = 'TPR', title = 'Agony with no MHC'),
-	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Agony with FDR'),
-	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Agony with FDR'),
-	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Agony with Bonferroni'),
-	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Agony with Bonferroni')
-	)
+# points = rbind(points, 
+	# aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'pvalues', metric = 'PPV', title = 'Agony with no MHC'),
+	# aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'pvalues', metric = 'TPR', title = 'Agony with no MHC'),
+	# aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Agony with FDR'),
+	# aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Agony with FDR'),
+	# aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Agony with Bonferroni'),
+	# aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Agony with Bonferroni')
+	# )
 
-points = rbind(points, 
-	aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'pvalues', metric = 'PPV', title = 'Agony with no MHC'),
-	aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'pvalues', metric = 'TPR', title = 'Agony with no MHC'),
-	aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Agony with FDR'),
-	aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Agony with FDR'),
-	aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Agony with Bonferroni'),
-	aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Agony with Bonferroni')
-	)
+# points = rbind(points, 
+	# aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'pvalues', metric = 'PPV', title = 'Agony with no MHC'),
+	# aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'pvalues', metric = 'TPR', title = 'Agony with no MHC'),
+	# aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Agony with FDR'),
+	# aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Agony with FDR'),
+	# aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Agony with Bonferroni'),
+	# aux(res = res1E5, m = 10000, which ='agony.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Agony with Bonferroni')
+	# )
 
-points = rbind(points, 
-	aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'pvalues', metric = 'PPV', title = 'Agony with no MHC'),
-	aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'pvalues', metric = 'TPR', title = 'Agony with no MHC'),
-	aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Agony with FDR'),
-	aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Agony with FDR'),
-	aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Agony with Bonferroni'),
-	aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Agony with Bonferroni')
-	)
+# points = rbind(points, 
+	# aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'pvalues', metric = 'PPV', title = 'Agony with no MHC'),
+	# aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'pvalues', metric = 'TPR', title = 'Agony with no MHC'),
+	# aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Agony with FDR'),
+	# aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Agony with FDR'),
+	# aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Agony with Bonferroni'),
+	# aux(res = res2E5, m = 20000, which ='agony.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Agony with Bonferroni')
+	# )
 	
-### Confidence
-points = rbind(points, 
-	aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'pvalues', metric = 'PPV', title = 'Confidence with no MHC'),
-	aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'pvalues', metric = 'TPR', title = 'Confidence with no MHC'),
-	aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Confidence with FDR'),
-	aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Confidence with FDR'),
-	aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Confidence with Bonferroni'),
-	aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Confidence with Bonferroni')
-	)
+# ### Confidence
+# points = rbind(points, 
+	# aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'pvalues', metric = 'PPV', title = 'Confidence with no MHC'),
+	# aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'pvalues', metric = 'TPR', title = 'Confidence with no MHC'),
+	# aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Confidence with FDR'),
+	# aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Confidence with FDR'),
+	# aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Confidence with Bonferroni'),
+	# aux(res = res1E3, m = 100, which ='confidence.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Confidence with Bonferroni')
+	# )
 
-points = rbind(points, 
-	aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'pvalues', metric = 'PPV', title = 'Confidence with no MHC'),
-	aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'pvalues', metric = 'TPR', title = 'Confidence with no MHC'),
-	aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Confidence with FDR'),
-	aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Confidence with FDR'),
-	aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Confidence with Bonferroni'),
-	aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Confidence with Bonferroni')
-	)
+# points = rbind(points, 
+	# aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'pvalues', metric = 'PPV', title = 'Confidence with no MHC'),
+	# aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'pvalues', metric = 'TPR', title = 'Confidence with no MHC'),
+	# aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Confidence with FDR'),
+	# aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Confidence with FDR'),
+	# aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Confidence with Bonferroni'),
+	# aux(res = res1E4, m = 1000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Confidence with Bonferroni')
+	# )
 
-points = rbind(points, 
-	aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'pvalues', metric = 'PPV', title = 'Confidence with no MHC'),
-	aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'pvalues', metric = 'TPR', title = 'Confidence with no MHC'),
-	aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Confidence with FDR'),
-	aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Confidence with FDR'),
-	aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Confidence with Bonferroni'),
-	aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Confidence with Bonferroni')
-	)
+# points = rbind(points, 
+	# aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'pvalues', metric = 'PPV', title = 'Confidence with no MHC'),
+	# aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'pvalues', metric = 'TPR', title = 'Confidence with no MHC'),
+	# aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Confidence with FDR'),
+	# aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Confidence with FDR'),
+	# aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Confidence with Bonferroni'),
+	# aux(res = res1E5, m = 10000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Confidence with Bonferroni')
+	# )
 
-points = rbind(points, 
-	aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'pvalues', metric = 'PPV', title = 'Confidence with no MHC'),
-	aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'pvalues', metric = 'TPR', title = 'Confidence with no MHC'),
-	aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Confidence with FDR'),
-	aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Confidence with FDR'),
-	aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Confidence with Bonferroni'),
-	aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Confidence with Bonferroni')
-	)
+# points = rbind(points, 
+	# aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'pvalues', metric = 'PPV', title = 'Confidence with no MHC'),
+	# aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'pvalues', metric = 'TPR', title = 'Confidence with no MHC'),
+	# aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'PPV', title = 'Confidence with FDR'),
+	# aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'qvalues.fdr', metric = 'TPR', title = 'Confidence with FDR'),
+	# aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'PPV', title = 'Confidence with Bonferroni'),
+	# aux(res = res2E5, m = 20000, which ='confidence.inference', algo = 'qvalues.holm', metric = 'TPR', title = 'Confidence with Bonferroni')
+	# )
 	
-### HC
-points = rbind(points, 
-	aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'PPV', title = 'Hill Climbing without restarts'),
-	aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'TPR', title = 'Hill Climbing without restarts'),
-	aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'PPV', title = 'Hill Climbing without restarts'),
-	aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'TPR', title = 'Hill Climbing without restarts'),
-	aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'PPV', title = 'Hill Climbing without restarts'),
-	aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'TPR', title = 'Hill Climbing without restarts'),
-	aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'PPV', title = 'Hill Climbing without restarts'),
-	aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'TPR', title = 'Hill Climbing without restarts')
-	)
+# ### HC
+# points = rbind(points, 
+	# aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'PPV', title = 'Hill Climbing without restarts'),
+	# aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'TPR', title = 'Hill Climbing without restarts'),
+	# aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'PPV', title = 'Hill Climbing without restarts'),
+	# aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'TPR', title = 'Hill Climbing without restarts'),
+	# aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'PPV', title = 'Hill Climbing without restarts'),
+	# aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'TPR', title = 'Hill Climbing without restarts'),
+	# aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'PPV', title = 'Hill Climbing without restarts'),
+	# aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = 'TPR', title = 'Hill Climbing without restarts')
+	# )
+
+# # points = rbind(points, 
+	# # aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
+	# # aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts'),
+	# # aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
+	# # aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts'),
+	# # aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
+	# # aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts'),
+	# # aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
+	# # aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts')
+	# # )
 
 # points = rbind(points, 
 	# aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
 	# aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts'),
 	# aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
-	# aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts'),
-	# aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
-	# aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts'),
-	# aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
-	# aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts')
+	# aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts')
 	# )
 
-points = rbind(points, 
-	aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
-	aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts'),
-	aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'PPV', title = 'Hill Climbing with restarts'),
-	aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.with.restarts', metric = 'TPR', title = 'Hill Climbing with restarts')
-	)
 
 for(i in c('tp', 'fp', 'fn', 'tn', 'TPR', 'SPC', 'PPV', 'NPV', 'FPR', 'FNR', 'FDR', 'ACC', 'F1', 'MW'))
+# for(i in c('TPR', 'SPC', 'PPV', 'ACC'))
 {
 	points = data.frame(stringsAsFactors = FALSE)
 	
@@ -186,7 +189,7 @@ for(i in c('tp', 'fp', 'fn', 'tn', 'TPR', 'SPC', 'PPV', 'NPV', 'FPR', 'FNR', 'FD
 	aux(res = res1E3, m = 100, which ='agony.inference', algo = 'pvalues', metric = i, title = 'Agony with no MHC'),
 	aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.fdr', metric = i, title = 'Agony with FDR'),
 	aux(res = res1E3, m = 100, which ='agony.inference', algo = 'qvalues.holm', metric = i, title = 'Agony with Bonferroni'),
-	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'pvalues', metric = 'PPV', title = 'Agony with no MHC'),
+	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'pvalues', metric = i, title = 'Agony with no MHC'),
 	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'pvalues', metric = i, title = 'Agony with no MHC'),
 	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.fdr', metric = i, title = 'Agony with FDR'),
 	aux(res = res1E4, m = 1000, which ='agony.inference', algo = 'qvalues.holm', metric = i, title = 'Agony with Bonferroni'),
@@ -211,7 +214,7 @@ for(i in c('tp', 'fp', 'fn', 'tn', 'TPR', 'SPC', 'PPV', 'NPV', 'FPR', 'FNR', 'FD
 	aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = i, title = 'Hill Climbing without restarts'),
 	aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = i, title = 'Hill Climbing without restarts'),
 	aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = i, title = 'Hill Climbing without restarts'),
-	aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = i, title = 'Hill Climbing without restarts'),
+	# aux(res = res2E5, m = 20000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = i, title = 'Hill Climbing without restarts'),
 	aux(res = res1E3, m = 100, which = NULL, algo = 'hill.climing.with.restarts', metric = i, title = 'Hill Climbing with restarts'),
 	aux(res = res1E4, m = 1000, which = NULL, algo = 'hill.climing.with.restarts', metric = i, title = 'Hill Climbing with restarts'),
 	aux(res = res1E5, m = 10000, which = NULL, algo = 'hill.climing.no.restarts.inference', metric = i, title = 'Hill Climbing without restarts')
@@ -232,7 +235,7 @@ for(i in c('tp', 'fp', 'fn', 'tn', 'TPR', 'SPC', 'PPV', 'NPV', 'FPR', 'FNR', 'FD
 		labs(title = paste(i, "- Alarm Network with 100+100 npb, p<0.01")) +
 		xlab("") +
 		ylab("")
-	pl
+	print(pl)
 	dev.copy2pdf(file = paste0(i,'.pdf'))
 }
 
@@ -263,46 +266,45 @@ for(i in c('tp', 'fp', 'fn', 'tn', 'TPR', 'SPC', 'PPV', 'NPV', 'FPR', 'FNR', 'FD
 # head(points)
 
 
-library(ggplot2)
 
-dev.new()
+# # dev.new()
 
-for(i in c('tp', 'fp', 'fn', 'tn', 'TPR', 'SPC', 'PPV', 'NPV', 'FPR', 'FNR', 'FDR', 'ACC', 'F1', 'MW'))
-{
-	subset = points[points$vscore == i, ]
-	print(subset)
+# for(i in c('tp', 'fp', 'fn', 'tn', 'TPR', 'SPC', 'PPV', 'NPV', 'FPR', 'FNR', 'FDR', 'ACC', 'F1', 'MW'))
+# {
+	# subset = points[points$vscore == i, ]
+	# print(subset)
 
-	pl = ggplot(subset, aes(x = algorithm, y = vvals))  +
-		geom_boxplot(aes(color = algorithm)) +
-		facet_wrap(~ vsampl)  +
-		scale_color_brewer(palette="Dark2") +
-		theme(
-			# axis.text.x=element_text(color = "black", size=7, angle=30, vjust=.8, hjust=0.8, face = "italic"), 
-			legend.position = "bottom",
-			legend.title = element_text(face = "italic"),
-			axis.text.x=element_blank())+
-		labs(title = paste(i, "- Alarm Network with 100+100 npb, p<0.01")) +
-		xlab("") +
-		ylab("")
-	pl
-	# dev.copy2pdf(file = paste0(i,'.pdf'))
-}
+	# pl = ggplot(subset, aes(x = algorithm, y = vvals))  +
+		# geom_boxplot(aes(color = algorithm)) +
+		# facet_wrap(~ vsampl)  +
+		# scale_color_brewer(palette="Dark2") +
+		# theme(
+			# # axis.text.x=element_text(color = "black", size=7, angle=30, vjust=.8, hjust=0.8, face = "italic"), 
+			# legend.position = "bottom",
+			# legend.title = element_text(face = "italic"),
+			# axis.text.x=element_blank())+
+		# labs(title = paste(i, "- Alarm Network with 100+100 npb, p<0.01")) +
+		# xlab("") +
+		# ylab("")
+	# pl
+	# # dev.copy2pdf(file = paste0(i,'.pdf'))
+# }
 
-head(points)
+# head(points)
 
-pl = ggplot(points[points$vscore == 'TPR', ], aes(x = algorithm, y = vvals))  +
-	geom_boxplot(aes(color = algorithm)) +
-	facet_wrap(~ vsampl)  +
-	scale_color_brewer(palette="Dark2") +
-	theme(
-	# axis.text.x=element_text(color = "black", size=7, angle=30, vjust=.8, hjust=0.8, face = "italic"), 
-		legend.position = "bottom",
-		legend.title = element_text(face = "italic"),
-		axis.text.x=element_blank())+
-	labs(title = "True Positive Rate (sensitivity/recall) - Alarm Network with 100+100 npb, p<0.01") +
-	xlab("") +
-	ylab("")
-pl
+# pl = ggplot(points[points$vscore == 'TPR', ], aes(x = algorithm, y = vvals))  +
+	# geom_boxplot(aes(color = algorithm)) +
+	# facet_wrap(~ vsampl)  +
+	# scale_color_brewer(palette="Dark2") +
+	# theme(
+	# # axis.text.x=element_text(color = "black", size=7, angle=30, vjust=.8, hjust=0.8, face = "italic"), 
+		# legend.position = "bottom",
+		# legend.title = element_text(face = "italic"),
+		# axis.text.x=element_blank())+
+	# labs(title = "True Positive Rate (sensitivity/recall) - Alarm Network with 100+100 npb, p<0.01") +
+	# xlab("") +
+	# ylab("")
+# pl
 
 
 

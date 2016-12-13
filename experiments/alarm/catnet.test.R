@@ -81,10 +81,9 @@ HC0 = paste0('Hill Climbing [', 0, ' restarts]')
 HC = paste0('Hill Climbing [', boot.first.pass + boot.second.pass, ' restarts]')
 
 
-DEV.OFF = FALSE
+DEV.OFF = TRUE
 
-source(paste0(git, "utils/plotter.R"))
-x1 = plt(results$agony.inference, results$agony.inference.pvalues, "pvalues", adj.matrix, AMHC, stats = FALSE, dev.off = DEV.OFF)
+x1 = plt(results$agony.inference, results$agony.inference.pvalues, "pvalues", adj.matrix, AMHC, dev.off = DEV.OFF)
 x2 = plt(results$agony.inference, results$agony.inference.pvalues, 'qvalues.fdr', adj.matrix, AFDR, dev.off = DEV.OFF)
 x3 = plt(results$agony.inference, results$agony.inference.pvalues, 'qvalues.holm', adj.matrix, ABNF, dev.off = DEV.OFF)
 
