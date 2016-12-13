@@ -51,13 +51,16 @@ values = c(100, 1000, 10000, 20000)
 
 res1E3 = res1E4 = res1E5 = res2E5 = NULL
 
-TOT = each * length(values)
-
+TOT = each
+dataset = NULL
 do = function(x,y){
 	cat("********** ", x, ":", y, "/", TOT, "\n")
 
-	# generate random data from that model 
-	dataset = rbn(bnalarm, n = x)
+	# generate random data from that model, ensure no NAs 
+	repeat {
+		dataset = rbn(bnalarm, n = x)
+		if(!any(is.na(dataset))) break
+	}
 
 	return(perform.bootstrap.inference(
 		dataset,
@@ -65,7 +68,8 @@ do = function(x,y){
 		boot.first.pass,
 		boot.second.pass,
 		test.pvalue,
-		agony.binaries = agony.binaries))
+		agony.binaries = agony.binaries,
+		doP = ifelse(j==1,TRUE, FALSE)))
 }
 
 for(j in 1:each) res1E3 = append(res1E3, list(do(100,j)))

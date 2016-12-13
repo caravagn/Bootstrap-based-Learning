@@ -104,7 +104,8 @@ perform.bootstrap.inference <- function( dataset, regularization = "bic", nboot.
     time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
   	cat("[*] Estimating the Bayesian Network with Hill Climbing and", nboot.first+nboot.second ,"restarts ...")
     hill.climing.with.restarts = perform.learning.with.restarts(dataset,regularization,restarts=(nboot.first+nboot.second))
-    results[["hill.climing.with.restarts"]] = hill.climing.with.restarts
+    # print(hill.climing.with.restarts)
+    results[["hill.climing.with.restarts.inference"]] = hill.climing.with.restarts
     cat(paste(" OK [", round(as.POSIXct(Sys.time(), format = "%H:%M:%S") - time, 3), " sec].\n", sep = ""))
 
     if(!(any(is.na(true_matrix)) || any(is.null(true_matrix)))) {
@@ -654,7 +655,7 @@ perform.learning.with.restarts <- function ( dataset, regularization, command = 
 		idx = idx[1]	
 	}
 
-	return(restarts.results[[idx]])
+	return(r[[idx]])
 	
 # #     # perform maximum likelihood inference with multiple restart
     # res = lapply(1:restarts, FUN = function( x ) {

@@ -2,5 +2,295 @@
 Running job for 18 hours or less. If this is incorrect, hit <CTRL> C now and use either the -28days or the -indefinite flag.
 
 Renewing credentials, you will be asked to type in your password
-Error renewing credentials, did you mistype your password?
-Please try again and if the credential renewal still fails contact support
+Running job in background
+**********  100 : 1 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.927 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.222 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.256 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [1.042 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [1.376 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.029 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.029 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.027 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.509 sec].
+Total time 19.7059636116028 sec.
+**********  100 : 2 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [4.056 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.23 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.288 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.966 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [1.501 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.013 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.015 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.024 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.271 sec].
+Total time 19.8963150978088 sec.
+**********  100 : 3 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.902 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.246 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.46 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.627 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.848 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.048 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.134 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.028 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.874 sec].
+Total time 19.6431016921997 sec.
+**********  100 : 4 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [4.121 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.286 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.651 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.879 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [1.482 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.031 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.047 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.027 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.393 sec].
+Total time 20.4272358417511 sec.
+**********  100 : 5 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.713 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.335 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.942 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.647 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.669 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.044 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.107 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.028 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.899 sec].
+Total time 19.8684434890747 sec.
+**********  100 : 6 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [4.235 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.302 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.721 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.735 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.699 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.05 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.09 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.031 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.715 sec].
+Total time 20.066465139389 sec.
+**********  100 : 7 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.935 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.214 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.318 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.623 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.841 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.059 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.057 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.023 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.394 sec].
+Total time 18.9369707107544 sec.
+**********  100 : 8 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.974 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.237 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.667 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.669 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [1.252 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.048 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.057 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.029 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [3.085 sec].
+Total time 20.5286400318146 sec.
+**********  100 : 9 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.974 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.276 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.954 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.584 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.688 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.061 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.037 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.033 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.412 sec].
+Total time 19.5610032081604 sec.
+**********  100 : 10 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.847 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.251 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.647 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.825 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.661 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.044 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.111 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.032 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.825 sec].
+Total time 19.7332010269165 sec.
+**********  100 : 11 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.913 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.246 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.745 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.972 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.828 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.054 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.07 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.026 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.435 sec].
+Total time 19.7729275226593 sec.
+**********  100 : 12 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.818 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.293 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.976 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.732 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.735 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.028 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.051 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.031 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [3.015 sec].
+Total time 20.1770272254944 sec.
+**********  100 : 13 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.987 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.257 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.719 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [1.073 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.674 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.057 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.013 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.028 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.756 sec].
+Total time 20.1680526733398 sec.
+**********  100 : 14 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [4.177 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.272 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.715 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.663 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.685 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.083 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.096 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.027 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [3.192 sec].
+Total time 20.4379398822784 sec.
+**********  100 : 15 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.918 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.27 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.846 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.708 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.812 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.077 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.084 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.031 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.806 sec].
+Total time 20.0805222988129 sec.
+**********  100 : 16 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [4.057 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.277 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.639 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.675 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.768 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.043 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.14 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.026 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.258 sec].
+Total time 19.3901221752167 sec.
+**********  100 : 17 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [4.185 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.231 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.543 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.644 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.619 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.113 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.079 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.026 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.798 sec].
+Total time 19.6057078838348 sec.
+**********  100 : 18 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.935 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.272 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [4.013 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.683 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.643 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.096 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.098 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.03 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.85 sec].
+Total time 20.1637454032898 sec.
+**********  100 : 19 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.706 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.234 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.268 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [1.045 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.871 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.08 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.069 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.025 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.319 sec].
+Total time 19.1319627761841 sec.
+**********  100 : 20 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.864 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.248 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.725 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [1.276 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [1.189 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.108 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.064 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.029 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [3.07 sec].
+Total time 21.1015882492065 sec.
+**********  100 : 21 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.789 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.254 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.521 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.638 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.78 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.115 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.117 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.03 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.605 sec].
+Total time 19.3752181529999 sec.
+**********  100 : 22 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.696 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.249 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.686 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.697 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.795 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.101 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.141 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.028 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [3.457 sec].
+Total time 20.3724181652069 sec.
+**********  100 : 23 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [4.29 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.252 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.332 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.939 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.585 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.066 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.076 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.026 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [2.532 sec].
+Total time 19.6199645996094 sec.
+**********  100 : 24 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ... OK [3.843 sec].
+[*] Estimating the confidence poset (Pi_conf) ... OK [0.258 sec].
+[*] Estimating the agony poset (Pi_ago) ... OK [3.635 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_conf: generating 100 estimates ... OK [0.855 sec].
+[*] Bootstrapping for Multiple Hypotheses Testing with Pi_ago: generating 100 estimates ... OK [0.682 sec].
+[*] Estimating the final Bayesian Network with Pi_conf ... OK [1.074 sec].
+[*] Estimating the final Bayesian Network with Pi_ago ... OK [1.104 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 0 restarts ... OK [0.031 sec].
+[*] Estimating the Bayesian Network with Hill Climbing and 200 restarts ... OK [3.451 sec].
+Total time 20.4229030609131 sec.
+**********  100 : 25 / 400 
+[*] Registering to use 42 / 48 cores via "parallel" ... OK.
+[*] Bootstrapping Pi_boot: generating 100 estimates ...
