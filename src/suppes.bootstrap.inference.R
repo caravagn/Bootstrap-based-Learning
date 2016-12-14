@@ -18,6 +18,9 @@ suppes.bootstrap.inference <- function( dataset, regularization = "bic", suppes.
     # structure where to save the results
     results = list()
 
+    unlink(agony_files, recursive = TRUE, force = TRUE)
+    dir.create(agony_files, showWarnings = FALSE)
+
     # perform the second pass of bootstrap on both posets
     time = as.POSIXct(Sys.time(), format = "%H:%M:%S")
     cat("[*] Bootstrapping for Multiple Hypotheses Testing with Suppes: generating", nboot.second, "estimates ...")
@@ -602,7 +605,7 @@ perform.learning.with.restarts <- function ( dataset, regularization, command = 
 		idx = idx[1]	
 	}
 
-	return(restarts.results[[idx]])
+	return(r[[idx]])
 	
 # #     # perform maximum likelihood inference with multiple restart
     # res = lapply(1:restarts, FUN = function( x ) {

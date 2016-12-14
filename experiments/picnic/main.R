@@ -13,21 +13,21 @@
 
 # This implemnetation of PiCnIc relies on TRONCO and a few other R packages for
 # data visualization -- we take care of installing them here
-if(!require('devtools')) install.packages('devtools', dependencies = T, repos='http://cran.us.r-project.org')
-if(!require('pheatmap')) install.packages('pheatmap', dependencies = T, repos='http://cran.us.r-project.org')
-if(!require('gridExtra')) install.packages('gridExtra', dependencies = T, repos='http://cran.us.r-project.org')
-if(!require('vioplot')) install.packages('vioplot', dependencies = T, repos='http://cran.us.r-project.org')
-if(!require('xlsx')) install.packages('xlsx', dependencies = T, repos='http://cran.us.r-project.org') 
+# if(!require('devtools')) install.packages('devtools', dependencies = T, repos='http://cran.us.r-project.org')
+# if(!require('pheatmap')) install.packages('pheatmap', dependencies = T, repos='http://cran.us.r-project.org')
+# if(!require('gridExtra')) install.packages('gridExtra', dependencies = T, repos='http://cran.us.r-project.org')
+# if(!require('vioplot')) install.packages('vioplot', dependencies = T, repos='http://cran.us.r-project.org')
+# if(!require('xlsx')) install.packages('xlsx', dependencies = T, repos='http://cran.us.r-project.org') 
 
 library(devtools)
 library(pheatmap)
 library(gridExtra)
 library(vioplot)
-library(xlsx)
+# library(xlsx)
 
 # You might install TRONCO's version from our Github as the lates version, which is
 # development, or master (stable)
-install_github("BIMIB-DISCo/TRONCO", ref = 'development')
+# install_github("BIMIB-DISCo/TRONCO", ref = 'development')
 library(TRONCO)
 
 # Set SINK to FALSE to avoid creating a log file
@@ -103,136 +103,6 @@ source('scripts/4.reconstruction.R', echo = T)
 ###############################################################################
 # source('scripts/5.statistics.R', echo = T)
 
-if(DOPLOTS) tronco.plot(MSI.models, 
-	 pathways = pathway.list, 
-	 fontsize = 15,
-	 edge.cex = 1.5,
- 	 legend.cex = .7,
-	 scale.nodes = .6,
-	 confidence = c('tp', 'pr', 'hg', 'npb'), # Display p-values 
-	 pathways.color = pathways.color,
-	 label.edge.size = 9,
-	disconnected = F, 
-	height.logic = .3
-	)
-#	file = paste0(workdir, '/msi.pdf'))
+save(MSS.models, file='MSS.models.Rdata')
+save(MSI.models, file='MSI.models.Rdata')
 
-# if(DOPLOTS) 
-tronco.plot(MSS.models, 
-	 pathways = pathway.list, 
-	 models = "capri_bic",
-	 fontsize = 15,
-	 edge.cex = 1.5,
- 	 legend.cex = .5,
-	 scale.nodes = .6,
-	 confidence = c('tp', 'pr', 'hg'), # Display p-values 
-	 pathways.color = pathways.color,
-	 label.edge.size = 9,
-	disconnected = F, 
-	height.logic = .3)
-
-tronco.plot(MSS.models, 
-	 pathways = pathway.list, 
-	 title = "",
-	 models = "capri_bic",
-	 fontsize = 15,
-	 pf = TRUE,
-	 edge.cex = 1.5,
-	 legend = F,
- 	 legend.cex = .5,
-	 scale.nodes = .6,
-	 # confidence = c('tp', 'pr', 'hg'), # Display p-values 
-	 pathways.color = pathways.color,
-	 label.edge.size = 9,
-	disconnected = F, 
-	expand = F,
-	height.logic = .3)
-
-dev.new(width=20, height = 20)
-tronco.plot(MSS.models, 
-	 pathways = pathway.list, 
-	 title = "",
-	 models = "capri_bic",
-	 # fontsize = 15,
-	 pf = TRUE,
-	 # edge.cex = 1.5,
-	 legend = F,
-	 scale.nodes = .6,
-	 # confidence = c('tp', 'pr', 'hg'), # Display p-values 
-	 pathways.color = pathways.color,
-	disconnected = F, 
-	expand = F)
-
-
-suppes = as.adj.matrix(MSS.models, models = "capri_bic", type = "pf")
-suppes = keysToNames(MSS.models, suppes$capri_bic)	
-
-fit.adj = as.adj.matrix(MSS.models, models = "capri_bic")
-fit.adj = keysToNames(MSS.models, fit.adj$capri_bic)
-
-dataset = keysToNames(MSS.models, as.genotypes(MSS.models))
-str(dataset)
-
-dataset <- as.data.frame(dataset, stringsAsFactors = TRUE) # the "[]" keeps the dataframe structure
-dataset[] <- lapply( dataset, factor) # the "[]" keeps the dataframe structure
-str(dataset)
-
-git = '/Volumes/Data/Github/Bootstrap-based-Learning/'
-agony.binaries = '/Volumes/Data/Github/Bootstrap-based-Learning/agony/giulio/agony'
-
-# load the required R packages
-library(bnlearn)
-library(parallel)
-library(doParallel)
-library(igraph)
-library(catnet)
-
-# source the required scripts
-source(paste0(git, "src/suppes.bootstrap.inference.R"))
-source(paste0(git, "utils/plotter.R"))
-source(paste0(git, "utils/stat.R"))
-
-# set the seed
-set.seed(12345)
-
-# set some settings to be used in the test
-regularization = "bic"
-boot.first.pass = 100
-boot.second.pass = 100
-test.pvalue = 1E-2
-
-#### perform the test
-results = suppes.bootstrap.inference(
-	dataset,
-	regularization,
-	suppes,
-	boot.second.pass,
-	test.pvalue,
-	agony.binaries = agony.binaries,
-	nboot.first = boot.first.pass)
-
-save(results, file = 'results.Rdata')
-	
-HC0 = MSS.models
-HC0$model$capri_bic$adj.matrix$adj.matrix.fit = results$hill.climing.no.restarts.inference
-pheatmap(results$hill.climing.no.restarts.inference)
-
-dev.new()
-pheatmap(HC0$model$capri_bic$adj.matrix$adj.matrix.fit)
-
-tronco.plot(HC0, 
-	 pathways = pathway.list, 
-	 models = "capri_bic",
-	 fontsize = 15,
-	 edge.cex = 1.5,
- 	 legend.cex = .5,
-	 # scale.nodes = .6,
-	 pathways.color = pathways.color,
-	disconnected = T, 
-	expand = T)
-
-HC0 = paste0('Hill Climbing [', 0, ' restarts]')
-HC = paste0('Hill Climbing [', boot.first.pass + boot.second.pass, ' restarts]')
-
-hc1 = plt(results, NULL, 'hill.climing.no.restarts.inference', fit.adj, HC0)
-hc2 = plt(results, NULL, 'hill.climing.with.restarts.inference', fit.adj, HC)

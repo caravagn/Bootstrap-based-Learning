@@ -198,12 +198,12 @@ recon = function(x, folder, mutex, ...) {
 	if(DOPLOTS) oncoprint(lift, file = paste0(folder, '/Rdata-lifted/lifted.pdf'))		
 	save(lift, file=paste0(folder, '/Rdata-lifted/lifted.Rdata'))	
 	
-	# CAPRI execution with seed set, default parameters:
+	# CAPRI execution with seed set, parameters:
 	# - regularization --> AIC/BIC
 	# -         pvalue --> 0.05
 	# -     heuristics --> Hill Climbing
-	# -          #boot --> 100
-	model = tronco.capri(lift, boot.seed = 12345)
+	# -          #boot --> 5000
+	model = tronco.capri(lift, boot.seed = 12345, nboot = 1000, min.stat = FALSE)
 
 	# Save the Rdata
 	save(model, file=paste0(folder, '/Rdata-models/model.Rdata'))
