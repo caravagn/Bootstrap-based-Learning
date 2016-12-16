@@ -4,7 +4,12 @@ git = '/Volumes/Data/Github/Bootstrap-based-Learning/'
 agony.binaries = '/Volumes/Data/Github/Bootstrap-based-Learning/agony/giulio/agony'
 
 # PiCnIc processing of TCGA-COADREAD data (cancer)
-source('main.R', echo = TRUE)
+if(!file.exists('MSS.models.Rdata') || !file.exists('MSI.models.Rdata')) { source('main.R', echo = TRUE) }
+else
+{
+	load('/Volumes/Data/Github/Bootstrap-based-Learning/experiments/picnic/MSS.models.Rdata')
+	load('/Volumes/Data/Github/Bootstrap-based-Learning/experiments/picnic/MSI.models.Rdata')
+}
 
 DOPLOTS = FALSE
 
@@ -56,15 +61,6 @@ tronco.plot(MSS.models,
 dev.copy2pdf(file='MSS-CAPRI.pdf')
 }
 
-# Prepare data -- genotypes
-dataset = keysToNames(MSS.models, as.genotypes(MSS.models))
-dataset = as.genotypes(MSS.models)
-str(dataset)
-
-dataset <- as.data.frame(dataset, stringsAsFactors = TRUE) # the "[]" keeps the dataframe structure
-dataset[] <- lapply( dataset, factor) # the "[]" keeps the dataframe structure
-str(dataset)
-
 # load the required R packages
 library(bnlearn)
 library(parallel)
@@ -107,7 +103,8 @@ export.primafacie = function(TCGA, model)
 		boot.second.pass,
 		test.pvalue,
 		agony.binaries = agony.binaries,
-		nboot.first = boot.first.pass)
+		nboot.first = boot.first.pass,
+		do.hc = FALSE)
 
 	save(results, file = paste0(model, '.suppes.Rdata'))
 
@@ -127,7 +124,26 @@ export.primafacie = function(TCGA, model)
 	# save(results.others, file = paste0(model, '.others.Rdata'))
 }
 
+# Prepare data -- genotypes
+dataset = keysToNames(MSS.models, as.genotypes(MSS.models))
+dataset = as.genotypes(MSS.models)
+str(dataset)
+
+dataset <- as.data.frame(dataset, stringsAsFactors = TRUE) # the "[]" keeps the dataframe structure
+dataset[] <- lapply( dataset, factor) # the "[]" keeps the dataframe structure
+str(dataset)
+
 export.primafacie(MSS.models, 'capri_bic')
 export.primafacie(MSS.models, 'capri_aic')
 
-# source('plot.R', echo = TRUE)
+# Prepare data -- genotypes
+dataset = keysToNames(MSI.models, as.genotypes(MSI.models))
+dataset = as.genotypes(MSI.models)
+str(dataset)
+
+dataset <- as.data.frame(dataset, stringsAsFactors = TRUE) # the "[]" keeps the dataframe structure
+dataset[] <- lapply( dataset, factor) # the "[]" keeps the dataframe structure
+str(dataset)
+
+export.primafacie(MSI.models, 'capri_bic')
+export.primafacie(MSI.models, 'capri_aic')
