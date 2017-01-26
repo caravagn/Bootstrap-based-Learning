@@ -89,7 +89,10 @@ STATS = TRUE
 
 x1 = plt(results$agony.inference, results$agony.inference.pvalues, 'qvalues.holm', adj.matrix, ABNF, stats = STATS, dev.off = DEV.OFF)
 
-x2 = plt(results.dummy$confidence.inference, results.dummy$confidence.inference.pvalues, 'pvalues', adj.matrix, NOT, stats = STATS, dev.off = DEV.OFF)
+x1 = plt(results$confidence.inference, results$confidence.inference.pvalues, 'qvalues.holm', adj.matrix, ABNF, stats = STATS, dev.off = DEV.OFF)
+
+
+x2 = plt(results.dummy$confidence.inference, results.dummy$confidence.inference.pvalues, 'qvalues.holm', adj.matrix, NOT, stats = STATS, dev.off = DEV.OFF)
 
 # x4 = plt(results$confidence.inference, results$confidence.inference.pvalues, "pvalues", adj.matrix, CMHC, stats = STATS, dev.off = DEV.OFF)
 # x5 = plt(results$confidence.inference, results$confidence.inference.pvalues, 'qvalues.fdr', adj.matrix, CFDR, stats = STATS, dev.off = DEV.OFF)
